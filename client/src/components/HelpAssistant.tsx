@@ -36,16 +36,15 @@ export default function HelpAssistant({
   size = 'md'
 }: HelpBubbleProps) {
   const { currentLanguage, t } = useLanguage();
-  const bubbleKey = `help_bubble_${context}`;
+  const bubbleKey = `help_bubble_${context}_session`;
   
   // State for UI management
   const [isOpen, setIsOpen] = useState(false);
   const [tipIndex, setTipIndex] = useState(0);
   
-  // Check localStorage on initial load
+  // Check sessionStorage on initial load - we'll only store dismissal for the current session
   useEffect(() => {
-    const isDismissed = localStorage.getItem(bubbleKey) === 'dismissed';
-    if (autoShow && !isDismissed) {
+    if (autoShow && !sessionStorage.getItem(bubbleKey)) {
       setIsOpen(true);
     }
   }, [autoShow, bubbleKey]);
@@ -240,27 +239,27 @@ export default function HelpAssistant({
     }
   }, [isOpen, autoHideAfter]);
 
-  // Function to dismiss the assistant
-  const dismissAssistant = () => {
-    localStorage.setItem(bubbleKey, 'dismissed');
-    setIsOpen(false);
+  // Function to toggle the assistant
+  const toggleAssistant = () => {
+    if (isOpen) {
+      // When closing bubble, store in sessionStorage for this context only
+      sessionStorage.setItem(bubbleKey, 'seen');
+      setIsOpen(false);
+    } else {
+      setIsOpen(true);
+    }
   };
 
-  // Check if dismissed from localStorage
-  const isDismissed = localStorage.getItem(bubbleKey) === 'dismissed';
-  
-  // Don't render anything if dismissed
-  if (isDismissed && !isOpen) {
-    return null;
-  }
+  // Check if this context bubble has been seen before
+  const hasBeenSeen = sessionStorage.getItem(bubbleKey) === 'seen';
 
   return (
     <div className={`fixed ${positionStyles[position]} z-50`}>
-      {/* Help Button */}
+      {/* Help Button - Always visible */}
       <motion.button
-        onClick={() => isOpen ? dismissAssistant() : setIsOpen(true)}
+        onClick={toggleAssistant}
         className={`${sizeStyles[size].iconSize} p-2 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center ${
-          !isOpen && pulse && !isDismissed ? 'animate-pulse' : ''
+          !isOpen && pulse && !hasBeenSeen ? 'animate-pulse' : ''
         }`}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
