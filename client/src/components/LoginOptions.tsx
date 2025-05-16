@@ -4,6 +4,32 @@ import { useAppContext } from '../contexts/AppContext';
 export default function LoginOptions() {
   const { login } = useAppContext();
 
+  // Mock function that would typically handle wallet connection
+  const handleWalletConnect = (type: 'phantom' | 'solflare' | 'google' | 'email') => {
+    let displayName = '';
+    let walletAddress = '';
+    
+    // Mock login data for demonstration
+    switch (type) {
+      case 'phantom':
+        displayName = 'Phantom User';
+        walletAddress = '8YLKofi3AzyGzYrJfTvRYnM7P3ZuQFXfm7UuCNLTruSx';
+        break;
+      case 'solflare':
+        displayName = 'Solflare User';
+        walletAddress = '6JkjwVLsbSDkdW5Y72e3jRsPrPYcBpyYsYJQE11Bmwy';
+        break;
+      case 'google':
+        displayName = 'Mohammed A.';
+        break;
+      case 'email':
+        displayName = 'amina@example.com';
+        break;
+    }
+    
+    login(type, displayName, walletAddress);
+  };
+
   return (
     <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
       <h3 className="text-lg font-semibold text-slate-800 mb-4">Connect to track your progress</h3>
@@ -14,26 +40,23 @@ export default function LoginOptions() {
       
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-3">
         <button 
-          onClick={() => login('phantom')}
-          className="flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors"
+          onClick={() => handleWalletConnect('phantom')}
+          className="flex items-center justify-center gap-2 bg-[#AB9FF2] hover:bg-[#9A8BDE] text-white font-medium py-2.5 px-4 rounded-lg transition-colors"
         >
-          <img src="https://phantom.app/img/logo.png" alt="Phantom" className="h-5 w-5" />
+          <img src={require('../assets/phantom-icon.svg')} alt="Phantom" className="h-6 w-6" />
           <span>Phantom</span>
         </button>
         
         <button 
-          onClick={() => login('solflare')}
-          className="flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-medium py-2.5 px-4 rounded-lg transition-colors"
+          onClick={() => handleWalletConnect('solflare')}
+          className="flex items-center justify-center gap-2 bg-[#FC9D0D] hover:bg-[#E88F00] text-white font-medium py-2.5 px-4 rounded-lg transition-colors"
         >
-          <svg className="h-5 w-5" viewBox="0 0 30 30" fill="currentColor">
-            <circle cx="15" cy="15" r="15" fill="currentColor" />
-            <path d="M9 12.5l2.5-2.5-2.5-2.5L6.5 10 9 12.5zM15 18.5l2.5-2.5-2.5-2.5-2.5 2.5 2.5 2.5zM15 8.5l2.5-2.5-2.5-2.5-2.5 2.5L15 8.5zM21 12.5l2.5-2.5-2.5-2.5-2.5 2.5L21 12.5z" fill="#FFF" />
-          </svg>
+          <img src={require('../assets/solflare-icon.svg')} alt="Solflare" className="h-6 w-6" />
           <span>Solflare</span>
         </button>
         
         <button 
-          onClick={() => login('google')}
+          onClick={() => handleWalletConnect('google')}
           className="flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-800 font-medium py-2.5 px-4 rounded-lg border border-slate-300 transition-colors"
         >
           <svg className="h-5 w-5 text-red-500" viewBox="0 0 24 24" fill="currentColor">
@@ -46,7 +69,7 @@ export default function LoginOptions() {
         </button>
         
         <button 
-          onClick={() => login('email')}
+          onClick={() => handleWalletConnect('email')}
           className="flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-800 font-medium py-2.5 px-4 rounded-lg border border-slate-300 transition-colors"
         >
           <svg className="h-5 w-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -55,6 +78,15 @@ export default function LoginOptions() {
           </svg>
           <span>Email</span>
         </button>
+      </div>
+      
+      <div className="mt-6 p-4 bg-slate-50 rounded-lg border border-slate-200">
+        <h4 className="text-sm font-medium text-slate-800 mb-2">About wallet integration</h4>
+        <p className="text-xs text-slate-600">
+          In a production environment, this would connect to actual Solana wallets using 
+          <code className="mx-1 px-1 py-0.5 bg-slate-100 rounded text-xs font-mono">@solana/wallet-adapter</code> 
+          with wallet abstraction via services like Dynamic.xyz or Privy.io for a seamless user experience.
+        </p>
       </div>
       
       <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-100 text-sm text-blue-700">
