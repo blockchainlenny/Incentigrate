@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAppContext } from '../contexts/AppContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { learningModules } from '../lib/data';
 import { 
   Gem, GraduationCap, BookOpen, MapPin, Clock, Trophy, Calendar,
@@ -16,6 +17,7 @@ interface DashboardProps {
 
 export default function Dashboard({ navigateTo }: DashboardProps) {
   const { isLoggedIn, userName, oTokenBalance, learningProgress } = useAppContext();
+  const { t } = useLanguage(); // Add translation support
 
   // Calculate total progress metrics
   const totalProgressData = Object.values(learningProgress).reduce(
@@ -43,16 +45,16 @@ export default function Dashboard({ navigateTo }: DashboardProps) {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
           <div>
             <h1 className="text-2xl font-bold text-slate-800">
-              {isLoggedIn ? `Welcome back, ${userName}!` : 'Welcome to Incentigrate!'}
+              {isLoggedIn ? `${t('welcomeBack')}, ${userName}!` : `${t('welcome')}!`}
             </h1>
-            <p className="text-slate-600 mt-1">Your integration journey assistant</p>
+            <p className="text-slate-600 mt-1">{t('continueWhere')}</p>
           </div>
           
           {isLoggedIn && (
             <div className="mt-4 md:mt-0 px-4 py-2 bg-white rounded-lg shadow-sm border border-slate-200 flex items-center gap-2">
               <Gem className="h-5 w-5 text-teal-500" />
               <span className="font-bold text-teal-600">{oTokenBalance}</span>
-              <span className="text-slate-600">$O Tokens</span>
+              <span className="text-slate-600">$O {t('tokenBalance')}</span>
             </div>
           )}
         </div>
@@ -62,10 +64,10 @@ export default function Dashboard({ navigateTo }: DashboardProps) {
             <div className="bg-white p-5 rounded-lg shadow-sm border border-slate-200">
               <h2 className="text-lg font-medium text-slate-800 mb-3 flex items-center">
                 <GraduationCap className="h-5 w-5 text-blue-500 mr-2" />
-                Start Your Integration Journey
+                {t('integrationJourney')}
               </h2>
               <p className="text-slate-600 mb-4">
-                Incentigrate helps refugees with language learning, career development, and community integration - all while earning rewards.
+                Incentigrate helps refugees with {t('learning')}, career development, and community integration - all while earning rewards.
               </p>
               <motion.button 
                 whileHover={{ scale: 1.03 }}
