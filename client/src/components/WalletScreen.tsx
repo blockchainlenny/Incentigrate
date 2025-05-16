@@ -173,219 +173,198 @@ export default function WalletScreen() {
             </div>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
-              <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6">
-                <h2 className="text-lg font-semibold text-slate-800 mb-4">Transaction History</h2>
+          {/* Three feature boxes side by side */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            {/* Token Redemption Box */}
+            <div id="token-redemption" className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+              <h2 className="text-lg font-semibold text-slate-800 mb-4">Token Redemption</h2>
+              <div className="p-4 bg-blue-50 rounded-lg border border-blue-100 mb-4">
+                <h3 className="font-medium text-blue-800 mb-2 flex items-center">
+                  <ArrowDownCircle className="h-4 w-4 mr-2" />
+                  Claim Your $O Tokens
+                </h3>
+                <p className="text-sm text-blue-700 mb-3">
+                  You can claim your $O tokens after a 3-month holding period and when your balance is at least 5,000 $O.
+                </p>
                 
-                {transactionHistory.length > 0 ? (
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr className="bg-slate-50">
-                          <th className="text-left px-4 py-2 rounded-l-lg">Type</th>
-                          <th className="text-left px-4 py-2">Description</th>
-                          <th className="text-right px-4 py-2">Amount</th>
-                          <th className="text-right px-4 py-2 rounded-r-lg">Date</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {transactionHistory.map((tx) => (
-                          <tr key={tx.id} className="border-b border-slate-100">
-                            <td className="px-4 py-3">
-                              <span className="flex items-center">
-                                <ArrowDownCircle className="h-4 w-4 text-green-500 mr-1" />
-                                {tx.type}
-                              </span>
-                            </td>
-                            <td className="px-4 py-3 text-slate-700">{tx.description}</td>
-                            <td className="px-4 py-3 text-right font-medium text-green-600">+{tx.amount} $O</td>
-                            <td className="px-4 py-3 text-right text-slate-500">{tx.date}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                {oTokenBalance >= 5000 ? (
+                  <div>
+                    <div className="mb-3 p-2 bg-white rounded border border-blue-200 flex justify-between items-center">
+                      <div>
+                        <p className="text-sm font-medium text-slate-700">Available to claim:</p>
+                        <p className="text-xl font-bold text-blue-700">{oTokenBalance} $O</p>
+                      </div>
+                      <button 
+                        className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md"
+                        onClick={() => alert("In the real application, this would initiate the Solana token transfer to your wallet. The tokens would be transferred on-chain.")}
+                      >
+                        Claim Now
+                      </button>
+                    </div>
+                    <p className="text-xs text-blue-600">Next claim available: Immediately</p>
                   </div>
                 ) : (
-                  <div className="text-center py-8">
-                    <p className="text-slate-500">No transactions yet</p>
-                    <p className="text-sm text-slate-400 mt-1">
-                      Complete learning modules and integration steps to earn $O tokens
+                  <div>
+                    <div className="mb-3">
+                      <div className="flex justify-between mb-1 text-sm">
+                        <span className="text-slate-700">Progress to minimum claim</span>
+                        <span className="font-medium text-blue-700">{Math.round((oTokenBalance / 5000) * 100)}%</span>
+                      </div>
+                      <div className="w-full bg-blue-200 rounded-full h-2.5">
+                        <div 
+                          className="bg-blue-600 h-2.5 rounded-full" 
+                          style={{ width: `${Math.min(100, Math.round((oTokenBalance / 5000) * 100))}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                    <p className="text-xs text-blue-600">
+                      {5000 - oTokenBalance} more $O tokens needed to reach minimum
+                    </p>
+                    <p className="text-xs text-blue-600 mt-1">
+                      Earliest claim: {new Date(Date.now() + (90 * 24 * 60 * 60 * 1000)).toLocaleDateString()}
                     </p>
                   </div>
                 )}
               </div>
+              
+              <div className="text-xs text-slate-600">
+                <h3 className="font-medium text-slate-800 mb-2">Claim Rules:</h3>
+                <ul className="space-y-1">
+                  <li className="flex items-center">
+                    <div className="h-1.5 w-1.5 rounded-full bg-blue-500 mr-2"></div>
+                    <span>Minimum balance: 5,000 $O tokens</span>
+                  </li>
+                  <li className="flex items-center">
+                    <div className="h-1.5 w-1.5 rounded-full bg-blue-500 mr-2"></div>
+                    <span>3-month holding period required</span>
+                  </li>
+                </ul>
+              </div>
             </div>
             
-            <div className="lg:col-span-1">
-              <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6">
-                <h2 className="text-lg font-semibold text-slate-800 mb-4">Transfer Tokens</h2>
-                
-                <form onSubmit={handleTransfer}>
-                  <div className="mb-4">
-                    <label htmlFor="amount" className="block text-sm font-medium text-slate-700 mb-1">
-                      Amount ($O)
-                    </label>
-                    <input
-                      type="number"
-                      id="amount"
-                      className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Enter amount"
-                      value={transferAmount}
-                      onChange={(e) => setTransferAmount(e.target.value)}
-                      required
-                      min="1"
-                      max={oTokenBalance.toString()}
-                    />
-                  </div>
-                  
-                  <div className="mb-6">
-                    <label htmlFor="recipient" className="block text-sm font-medium text-slate-700 mb-1">
-                      Recipient Address
-                    </label>
-                    <input
-                      type="text"
-                      id="recipient"
-                      className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="e.g. 8zH5G..."
-                      value={recipientAddress}
-                      onChange={(e) => setRecipientAddress(e.target.value)}
-                      required
-                    />
-                  </div>
-                  
-                  <button
-                    type="submit"
-                    className="w-full flex justify-center items-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
-                    disabled={isTransferring || !transferAmount || !recipientAddress}
-                  >
-                    {isTransferring ? (
-                      <>
-                        <RefreshCw className="h-4 w-4 animate-spin mr-2" />
-                        Processing...
-                      </>
-                    ) : (
-                      <>
-                        <Send className="h-4 w-4 mr-2" />
-                        Send Tokens
-                      </>
-                    )}
-                  </button>
-                </form>
-                
-                <div className="mt-6 border-t border-slate-200 pt-4">
-                  <h3 className="text-sm font-medium text-slate-700 mb-3">Use $O Tokens For:</h3>
-                  <ul className="text-sm text-slate-600 space-y-2">
-                    <li className="flex items-start">
-                      <span className="text-blue-500 mr-2">•</span>
-                      <span>Access premium integration services</span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="text-blue-500 mr-2">•</span>
-                      <span>Community marketplace purchases</span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="text-blue-500 mr-2">•</span>
-                      <span>Unlocking advanced learning modules</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+            {/* Token Transfer Box */}
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+              <h2 className="text-lg font-semibold text-slate-800 mb-4">Transfer Tokens</h2>
               
-              <div id="token-redemption" className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6">
-                <h2 className="text-lg font-semibold text-slate-800 mb-4">Token Redemption</h2>
-                <div className="p-4 bg-blue-50 rounded-lg border border-blue-100 mb-4">
-                  <h3 className="font-medium text-blue-800 mb-2 flex items-center">
-                    <ArrowDownCircle className="h-4 w-4 mr-2" />
-                    Claim Your $O Tokens
-                  </h3>
-                  <p className="text-sm text-blue-700 mb-3">
-                    You can claim your $O tokens after a 3-month holding period and when your balance is at least 5,000 $O.
-                  </p>
-                  
-                  {oTokenBalance >= 5000 ? (
-                    <div>
-                      <div className="mb-3 p-2 bg-white rounded border border-blue-200 flex justify-between items-center">
-                        <div>
-                          <p className="text-sm font-medium text-slate-700">Available to claim:</p>
-                          <p className="text-xl font-bold text-blue-700">{oTokenBalance} $O</p>
-                        </div>
-                        <button 
-                          className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md"
-                          onClick={() => alert("In the real application, this would initiate the Solana token transfer to your wallet. The tokens would be transferred on-chain.")}
-                        >
-                          Claim Now
-                        </button>
-                      </div>
-                      <p className="text-xs text-blue-600">Next claim available: Immediately</p>
-                    </div>
+              <form onSubmit={handleTransfer}>
+                <div className="mb-4">
+                  <label htmlFor="amount" className="block text-sm font-medium text-slate-700 mb-1">
+                    Amount ($O)
+                  </label>
+                  <input
+                    type="number"
+                    id="amount"
+                    className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter amount"
+                    value={transferAmount}
+                    onChange={(e) => setTransferAmount(e.target.value)}
+                    required
+                    min="1"
+                    max={oTokenBalance.toString()}
+                  />
+                </div>
+                
+                <div className="mb-4">
+                  <label htmlFor="recipient" className="block text-sm font-medium text-slate-700 mb-1">
+                    Recipient Address
+                  </label>
+                  <input
+                    type="text"
+                    id="recipient"
+                    className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="e.g. 8zH5G..."
+                    value={recipientAddress}
+                    onChange={(e) => setRecipientAddress(e.target.value)}
+                    required
+                  />
+                </div>
+                
+                <button
+                  type="submit"
+                  className="w-full flex justify-center items-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
+                  disabled={isTransferring || !transferAmount || !recipientAddress}
+                >
+                  {isTransferring ? (
+                    <>
+                      <RefreshCw className="h-4 w-4 animate-spin mr-2" />
+                      Processing...
+                    </>
                   ) : (
-                    <div>
-                      <div className="mb-3">
-                        <div className="flex justify-between mb-1 text-sm">
-                          <span className="text-slate-700">Progress to minimum claim</span>
-                          <span className="font-medium text-blue-700">{Math.round((oTokenBalance / 5000) * 100)}%</span>
-                        </div>
-                        <div className="w-full bg-blue-200 rounded-full h-2.5">
-                          <div 
-                            className="bg-blue-600 h-2.5 rounded-full" 
-                            style={{ width: `${Math.min(100, Math.round((oTokenBalance / 5000) * 100))}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                      <p className="text-xs text-blue-600">
-                        {5000 - oTokenBalance} more $O tokens needed to reach the minimum claim amount
-                      </p>
-                      <p className="text-xs text-blue-600 mt-1">
-                        Earliest claim date: {new Date(Date.now() + (90 * 24 * 60 * 60 * 1000)).toLocaleDateString()}
-                      </p>
-                    </div>
+                    <>
+                      <Send className="h-4 w-4 mr-2" />
+                      Send Tokens
+                    </>
                   )}
-                </div>
-                
-                <div className="text-sm text-slate-600 mb-4">
-                  <h3 className="font-medium text-slate-800 mb-2">Claim Rules:</h3>
-                  <ul className="space-y-1">
-                    <li className="flex items-center">
-                      <div className="h-1.5 w-1.5 rounded-full bg-blue-500 mr-2"></div>
-                      <span>Minimum balance: 5,000 $O tokens</span>
-                    </li>
-                    <li className="flex items-center">
-                      <div className="h-1.5 w-1.5 rounded-full bg-blue-500 mr-2"></div>
-                      <span>3-month holding period required</span>
-                    </li>
-                    <li className="flex items-center">
-                      <div className="h-1.5 w-1.5 rounded-full bg-blue-500 mr-2"></div>
-                      <span>Tokens are transferred to your connected Solana wallet</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              
-              <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                <h2 className="text-lg font-semibold text-slate-800 mb-4">About $O Token</h2>
-                <p className="text-sm text-slate-600 mb-4">
-                  The $O token powers the Incentigrate ecosystem and rewards refugees for completing integration steps and learning modules.
-                </p>
-                <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 text-sm">
-                  <h3 className="font-medium text-slate-800 mb-2">Tokenomics:</h3>
-                  <ul className="space-y-1.5 text-slate-600">
-                    <li className="flex items-start">
-                      <div className="h-1.5 w-1.5 rounded-full bg-teal-500 mt-1.5 mr-2"></div>
-                      <span>100% of tokens are earned by refugees through platform activities</span>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="h-1.5 w-1.5 rounded-full bg-teal-500 mt-1.5 mr-2"></div>
-                      <span>Tokens are backed by real-world integration support services</span>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="h-1.5 w-1.5 rounded-full bg-teal-500 mt-1.5 mr-2"></div>
-                      <span>$O tokens can be used for premium services or redeemed for fiat value</span>
-                    </li>
-                  </ul>
-                </div>
+                </button>
+              </form>
+            </div>
+            
+            {/* About Token Box */}
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+              <h2 className="text-lg font-semibold text-slate-800 mb-4">About $O Token</h2>
+              <p className="text-sm text-slate-600 mb-4">
+                The $O token powers the Incentigrate ecosystem and rewards refugees for completing integration steps.
+              </p>
+              <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 text-sm">
+                <h3 className="font-medium text-slate-800 mb-2">Tokenomics:</h3>
+                <ul className="space-y-1.5 text-xs text-slate-600">
+                  <li className="flex items-start">
+                    <div className="h-1.5 w-1.5 rounded-full bg-teal-500 mt-1 mr-2"></div>
+                    <span>100% of tokens earned through platform activities</span>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="h-1.5 w-1.5 rounded-full bg-teal-500 mt-1 mr-2"></div>
+                    <span>Backed by real-world integration support services</span>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="h-1.5 w-1.5 rounded-full bg-teal-500 mt-1 mr-2"></div>
+                    <span>Usable for premium services or fiat redemption</span>
+                  </li>
+                </ul>
               </div>
             </div>
+          </div>
+          
+          {/* Transaction History Section (Full Width) */}
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <h2 className="text-lg font-semibold text-slate-800 mb-4">Transaction History</h2>
+            
+            {transactionHistory.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="bg-slate-50">
+                      <th className="text-left px-4 py-2 rounded-l-lg">Type</th>
+                      <th className="text-left px-4 py-2">Description</th>
+                      <th className="text-right px-4 py-2">Amount</th>
+                      <th className="text-right px-4 py-2 rounded-r-lg">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {transactionHistory.map((tx) => (
+                      <tr key={tx.id} className="border-b border-slate-100">
+                        <td className="px-4 py-3">
+                          <span className="flex items-center">
+                            <ArrowDownCircle className="h-4 w-4 text-green-500 mr-1" />
+                            {tx.type}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-slate-700">{tx.description}</td>
+                        <td className="px-4 py-3 text-right font-medium text-green-600">+{tx.amount} $O</td>
+                        <td className="px-4 py-3 text-right text-slate-500">{tx.date}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <p className="text-slate-500">No transactions yet</p>
+                <p className="text-sm text-slate-400 mt-1">
+                  Complete learning modules and integration steps to earn $O tokens
+                </p>
+              </div>
+            )}
           </div>
         </>
       )}
