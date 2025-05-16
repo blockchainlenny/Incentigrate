@@ -513,10 +513,17 @@ export default function Dashboard({ navigateTo }: DashboardProps) {
           {/* Duolingo-Style Lessons */}
           <motion.div 
             whileHover={{ scale: 1.02 }}
-            className="p-4 rounded-lg border border-blue-200 bg-blue-50"
+            className="p-4 rounded-lg border border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100 relative overflow-hidden"
           >
-            <div className="flex items-center mb-3">
-              <div className="p-2 bg-blue-100 rounded-full">
+            {/* Background decorative elements */}
+            <div className="absolute opacity-10 right-0 top-0">
+              <svg width="100" height="100" viewBox="0 0 24 24" fill="currentColor" className="text-blue-600">
+                <path d="M10 20H6V4h4v16zm8 0h-4V4h4v16zM8 2h8a2 2 0 012 2v16a2 2 0 01-2 2H8a2 2 0 01-2-2V4a2 2 0 012-2z"/>
+              </svg>
+            </div>
+            
+            <div className="flex items-center mb-3 relative z-10">
+              <div className="p-2 bg-blue-100 rounded-full shadow-sm">
                 <AnimatedIcon 
                   icon={<Lightbulb />}
                   size="sm"
@@ -528,17 +535,42 @@ export default function Dashboard({ navigateTo }: DashboardProps) {
               </div>
               <h3 className="ml-3 font-medium text-slate-800">Interactive Lessons</h3>
             </div>
-            <div className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded inline-block mb-2">
+            
+            <div className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded inline-block mb-3">
               New Feature
             </div>
-            <p className="text-sm text-slate-600 mb-3">
-              Learn with fun, interactive exercises in a Duolingo-style interface. Practice language skills and earn rewards as you progress.
-            </p>
+            
+            <div className="relative z-10">
+              <div className="flex items-start mb-3">
+                <div className="flex-1">
+                  <p className="text-sm text-slate-600">
+                    Learn with fun, interactive exercises in a Duolingo-style interface. Practice language skills and earn rewards as you progress.
+                  </p>
+                </div>
+                
+                {/* Friendly character image */}
+                <div className="ml-2 relative">
+                  <div className="w-12 h-12 bg-white rounded-full overflow-hidden border-2 border-blue-200 shadow-sm">
+                    <svg viewBox="0 0 36 36">
+                      <circle fill="#FFCC4D" cx="18" cy="18" r="18" />
+                      <circle fill="#664500" cx="12" cy="12" r="2.5" />
+                      <circle fill="#664500" cx="24" cy="12" r="2.5" />
+                      <path fill="#664500" d="M18 22c-3.623 0-6.027-.422-9-1-.679-.131-2 0-2 2 0 4 4.595 9 11 9 6.404 0 11-5 11-9 0-2-1.321-2.132-2-2-2.973.578-5.377 1-9 1z" />
+                      <path fill="#FFF" d="M9 23s3 1 9 1 9-1 9-1-2 4-9 4-9-4-9-4z" />
+                    </svg>
+                  </div>
+                  <div className="absolute -top-2 -right-2 bg-white text-xs px-1.5 py-0.5 rounded-full text-blue-600 font-bold border border-blue-200 shadow-sm">
+                    A1
+                  </div>
+                </div>
+              </div>
+            </div>
+            
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigateTo('duolingo_lesson')}
-              className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+              className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors shadow-sm relative z-10"
             >
               Try a Lesson
             </motion.button>
@@ -547,10 +579,17 @@ export default function Dashboard({ navigateTo }: DashboardProps) {
           {/* Quests */}
           <motion.div 
             whileHover={{ scale: 1.02 }}
-            className="p-4 rounded-lg border border-amber-200 bg-amber-50"
+            className="p-4 rounded-lg border border-amber-200 bg-gradient-to-br from-amber-50 to-amber-100 relative overflow-hidden"
           >
-            <div className="flex items-center mb-3">
-              <div className="p-2 bg-amber-100 rounded-full">
+            {/* Background decorative elements */}
+            <div className="absolute opacity-10 right-5 top-5">
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="currentColor" className="text-amber-600">
+                <path d="M12 1l3.22 6.53 7.21 1.05-5.21 5.08 1.23 7.19L12 17.77l-6.45 3.08 1.23-7.19-5.21-5.08 7.21-1.05L12 1z"/>
+              </svg>
+            </div>
+            
+            <div className="flex items-center mb-3 relative z-10">
+              <div className="p-2 bg-amber-100 rounded-full shadow-sm">
                 <AnimatedIcon 
                   icon={<Trophy />}
                   size="sm"
@@ -562,17 +601,42 @@ export default function Dashboard({ navigateTo }: DashboardProps) {
               </div>
               <h3 className="ml-3 font-medium text-slate-800">Quest Map</h3>
             </div>
-            <div className="bg-amber-100 text-amber-800 text-xs font-medium px-2 py-0.5 rounded inline-block mb-2">
+            
+            <div className="bg-amber-100 text-amber-800 text-xs font-medium px-2 py-0.5 rounded inline-block mb-3">
               New Feature
             </div>
-            <p className="text-sm text-slate-600 mb-3">
-              Complete quests to earn rewards and advance your integration journey through fun, interactive challenges.
-            </p>
+            
+            <div className="relative z-10">
+              <div className="flex items-start mb-3">
+                <div className="flex-1">
+                  <p className="text-sm text-slate-600">
+                    Complete quests to earn rewards and advance your integration journey through fun, interactive challenges.
+                  </p>
+                </div>
+                
+                {/* Friendly character image */}
+                <div className="ml-2 relative">
+                  <div className="w-12 h-12 bg-white rounded-full overflow-hidden border-2 border-amber-200 shadow-sm">
+                    <svg viewBox="0 0 36 36">
+                      <circle fill="#F4900C" cx="18" cy="18" r="18"/>
+                      <path fill="#662113" d="M27 13c0 1.657-1.343 3-3 3s-3-1.343-3-3 1.343-3 3-3 3 1.343 3 3m-12 0c0 1.657-1.343 3-3 3s-3-1.343-3-3 1.343-3 3-3 3 1.343 3 3"/>
+                      <path fill="#662113" d="M22 27h-8c-1.1 0-2-.9-2-2v-2h12v2c0 1.1-.9 2-2 2z"/>
+                      <path fill="#FFF" d="M14 24h8v-1h-8v1z"/>
+                      <path fill="#E95F28" d="M18 23l-5-5 5-1 5 1z"/>
+                    </svg>
+                  </div>
+                  <div className="absolute -top-2 -right-2 bg-white text-xs px-1.5 py-0.5 rounded-full text-amber-600 font-bold border border-amber-200 shadow-sm">
+                    <Trophy className="h-3 w-3" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigateTo('quests')}
-              className="w-full py-2 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg transition-colors"
+              className="w-full py-2 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg transition-colors shadow-sm relative z-10"
             >
               Start Quests
             </motion.button>
@@ -581,10 +645,17 @@ export default function Dashboard({ navigateTo }: DashboardProps) {
           {/* Activity Tracking */}
           <motion.div 
             whileHover={{ scale: 1.02 }}
-            className="p-4 rounded-lg border border-emerald-200 bg-emerald-50"
+            className="p-4 rounded-lg border border-emerald-200 bg-gradient-to-br from-emerald-50 to-emerald-100 relative overflow-hidden"
           >
-            <div className="flex items-center mb-3">
-              <div className="p-2 bg-emerald-100 rounded-full">
+            {/* Background decorative elements */}
+            <div className="absolute opacity-10 right-5 bottom-5">
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="currentColor" className="text-emerald-600">
+                <path d="M3 4v7h7V4H3zm7 7v7h7v-7h-7zm-7 0h7v7H3v-7z"/>
+              </svg>
+            </div>
+            
+            <div className="flex items-center mb-3 relative z-10">
+              <div className="p-2 bg-emerald-100 rounded-full shadow-sm">
                 <AnimatedIcon 
                   icon={<Footprints />}
                   size="sm"
@@ -596,17 +667,43 @@ export default function Dashboard({ navigateTo }: DashboardProps) {
               </div>
               <h3 className="ml-3 font-medium text-slate-800">Activity Tracker</h3>
             </div>
-            <div className="bg-emerald-100 text-emerald-800 text-xs font-medium px-2 py-0.5 rounded inline-block mb-2">
+            
+            <div className="bg-emerald-100 text-emerald-800 text-xs font-medium px-2 py-0.5 rounded inline-block mb-3">
               New Feature
             </div>
-            <p className="text-sm text-slate-600 mb-3">
-              Log your real-world integration activities and earn rewards for attending classes, appointments, and community events.
-            </p>
+            
+            <div className="relative z-10">
+              <div className="flex items-start mb-3">
+                <div className="flex-1">
+                  <p className="text-sm text-slate-600">
+                    Log your real-world integration activities and earn rewards for attending classes, appointments, and community events.
+                  </p>
+                </div>
+                
+                {/* Friendly character image */}
+                <div className="ml-2 relative">
+                  <div className="w-12 h-12 bg-white rounded-full overflow-hidden border-2 border-emerald-200 shadow-sm">
+                    <svg viewBox="0 0 36 36">
+                      <circle fill="#77B255" cx="18" cy="18" r="18"/>
+                      <circle fill="#292F33" cx="12" cy="15" r="2"/>
+                      <circle fill="#292F33" cx="24" cy="15" r="2"/>
+                      <path fill="#292F33" d="M18 31c-5 0-9-4-9-9v-1h18v1c0 5-4 9-9 9z"/>
+                      <path fill="#FFF" d="M18 31c-4 0-8-3.6-8-8h16c0 4.4-4 8-8 8z"/>
+                      <path fill="#77B255" d="M10 13c-1.7 0-3-1.3-3-3s1.3-3 3-3c-.2.3-.3.6-.3 1 0 1.1.9 2 2 2 .4 0 .7-.1 1-.3 0 1.6-1.3 3-2.7 3.3zm16 0c1.7 0 3-1.3 3-3s-1.3-3-3-3c.2.3.3.6.3 1 0 1.1-.9 2-2 2-.4 0-.7-.1-1-.3 0 1.6 1.3 3 2.7 3.3z"/>
+                    </svg>
+                  </div>
+                  <div className="absolute -top-2 -right-2 bg-white text-xs px-1.5 py-0.5 rounded-full text-emerald-600 font-bold border border-emerald-200 shadow-sm">
+                    <span>+10</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigateTo('activity_tracker')}
-              className="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors"
+              className="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors shadow-sm relative z-10"
             >
               Track Activities
             </motion.button>
