@@ -255,13 +255,8 @@ export default function HelpAssistant({
 
   // Function to toggle the assistant
   const toggleAssistant = () => {
-    if (isOpen) {
-      // When closing bubble, store in sessionStorage for this context only
-      sessionStorage.setItem(bubbleKey, 'seen');
-      setIsOpen(false);
-    } else {
-      setIsOpen(true);
-    }
+    // Simply toggle the open state without affecting the global appearance
+    setIsOpen(!isOpen);
   };
 
   // Check if this context bubble has been seen before
