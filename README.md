@@ -6,10 +6,17 @@
 **Incentigrate is a mobile-first dApp built on Solana, empowering refugees to rebuild their lives by rewarding integration milestones and fostering genuine connections within their new communities.**
 
 ---
+## 🏆 Validation & Milestones
+
+🥉 **3rd Place** - Superteam Germany Ideathon Munich 04/2025 
+[@SuperteamDE Tweet](https://x.com/Incentigrate/status/1915303051235074264)
+
+
+---
 
 ## ✨ Solana Colosseum Breakout Hackathon Submission ✨
 
-This project is submitted for the Solana Colosseum Breakout Hackathon  &  Jägermeister Sidetrack - "Bringing People Together" (May 2025) 
+This project is submitted for the Solana Colosseum Breakout Hackathon  &  Jägermeister Sidetrack - "Bringing People Together" (May 2025) after 
 
 Incentigrate directly embodies Jägermeister's vision by leveraging Web3 technology to unite newcomers and locals, turning the often isolating process of integration into shared, rewarding social experiences.
 
