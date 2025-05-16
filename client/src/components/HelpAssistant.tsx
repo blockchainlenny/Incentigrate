@@ -44,24 +44,17 @@ export default function HelpAssistant({
   
   // On component mount, check if we should show bubble
   useEffect(() => {
-    // Global setting to prevent bubbles from appearing on every page
-    const globalBubbleShown = localStorage.getItem('help_bubbles_global') === 'shown';
+    // Only once per app session - this prevents bubbles from showing on every page navigation
+    const hasSeenAnyBubbles = localStorage.getItem('first_visit_complete') === 'true';
     
-    // Per-session setting to remember if user has seen this specific context
-    const sessionBubbleShown = sessionStorage.getItem(bubbleKey) === 'seen';
-    
-    // Only show bubbles if:
-    // 1. Auto-show is true AND
-    // 2. User hasn't seen ANY bubbles in this app session yet
-    // 3. AND this specific context hasn't been seen in this browser session
-    if (autoShow && !globalBubbleShown && !sessionBubbleShown) {
+    // Only auto-show on the first page visit in the entire app session
+    // Once shown and dismissed, it won't auto-show again until the user refreshes the page
+    if (autoShow && !hasSeenAnyBubbles) {
       setIsOpen(true);
-      // Mark globally that we've shown a bubble for this page load
-      localStorage.setItem('help_bubbles_global', 'shown');
-      // Also mark this specific context as seen for this browser session
-      sessionStorage.setItem(bubbleKey, 'seen');
+      // Mark that user has seen at least one bubble this session
+      localStorage.setItem('first_visit_complete', 'true');
     }
-  }, []); // Empty dependency array - only run on component mount
+  }, []); // Empty dependency array - only run once per component mount
   
   // Character personality traits
   const characterName = "Inti";
