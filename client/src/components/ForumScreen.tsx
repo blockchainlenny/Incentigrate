@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAppContext } from '../contexts/AppContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { 
   MessageSquare, 
   Users, 

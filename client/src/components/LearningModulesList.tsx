@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { getAllLearningModules, LearningModule } from '../lib/data';
 import { useAppContext } from '../contexts/AppContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { 
   BookOpen, 
   GraduationCap, 
@@ -19,6 +20,7 @@ interface LearningModulesListProps {
 
 export default function LearningModulesList({ onSelectModule }: LearningModulesListProps) {
   const { isLoggedIn, learningProgress } = useAppContext();
+  const { t } = useLanguage(); // Add translation support
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   
@@ -103,9 +105,9 @@ export default function LearningModulesList({ onSelectModule }: LearningModulesL
   
   return (
     <div className="max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold text-slate-800 mb-2">Learning Modules</h1>
+      <h1 className="text-2xl font-bold text-slate-800 mb-2">{t('moduleList')}</h1>
       <p className="text-slate-600 mb-6">
-        Explore courses and modules designed to help with integration and skill-building. 
+        {t('continueWhere')}. 
         Complete modules to earn token rewards.
       </p>
       

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useAppContext } from '../contexts/AppContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { Wallet, Send, ArrowDownCircle, RefreshCw, Copy, ExternalLink, Check, Gem, BookOpen } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function WalletScreen() {
   const { isLoggedIn, oTokenBalance, userName, loginType, walletAddress } = useAppContext();
   const { login, logout } = useAppContext();
+  const { t } = useLanguage(); // Add translation support
   
   const [isTransferring, setIsTransferring] = useState(false);
   const [transferAmount, setTransferAmount] = useState("");
