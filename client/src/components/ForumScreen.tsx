@@ -55,8 +55,8 @@ const mockPosts: OldForumPost[] = [
   {
     id: 'post2',
     title: 'Tips for passing the B1 German language exam?',
-    author: 'Mohammad S.',
-    authorImage: 'https://api.dicebear.com/7.x/initials/svg?seed=MS',
+    author: 'Mohammed Al-Farsi',
+    authorImage: 'https://api.dicebear.com/7.x/avataaars/svg?seed=MS&mouth=smile&eyes=happy&backgroundColor=b6e3f4',
     time: '5 hours ago',
     category: 'Language Learning',
     content: 'I\'m preparing for the B1 language exam next month and feeling nervous. Has anyone here taken it recently? Any advice on the speaking portion? I\'m particularly worried about that part.',
@@ -219,10 +219,44 @@ export default function ForumScreen() {
   const [sortOption, setSortOption] = useState('recent');
   const [likedPosts, setLikedPosts] = useState<string[]>([]);
   const [selectedLanguage, setSelectedLanguage] = useState<'en' | 'de' | 'ar' | 'all'>('all');
+  const [replyContent, setReplyContent] = useState('');
+  const [showReplyForm, setShowReplyForm] = useState(false);
   
   // Toggle post expansion
   const togglePostExpansion = (postId: string) => {
-    setExpandedPostId(expandedPostId === postId ? null : postId);
+    const isExpanding = expandedPostId !== postId;
+    setExpandedPostId(isExpanding ? postId : null);
+    
+    // Simulate clicking on a post - in a real app, this would fetch post details and replies
+    if (isExpanding) {
+      // This would be a real API call in a production app
+      console.log(`Fetching details for post ${postId}`);
+      setShowReplyForm(false); // Reset reply form when opening a new post
+    }
+  };
+  
+  // Handle showing reply form 
+  const handleReplyClick = (postId: string) => {
+    if (!isLoggedIn) return;
+    
+    setExpandedPostId(postId);
+    setShowReplyForm(true);
+    setReplyContent('');
+  };
+  
+  // Submit a reply
+  const submitReply = (postId: string) => {
+    if (!replyContent.trim() || !isLoggedIn) return;
+    
+    console.log(`Submitting reply to post ${postId}: ${replyContent}`);
+    // In a real app, this would be an API call to submit the reply
+    
+    // Reset form
+    setReplyContent('');
+    setShowReplyForm(false);
+    
+    // Show success message or update UI to show the new reply
+    alert('Your reply has been posted!');
   };
   
   // Toggle like on a post
