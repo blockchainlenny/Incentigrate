@@ -214,6 +214,7 @@ const allLanguagePosts = [...englishPosts, ...germanPosts, ...arabicPosts];
 
 export default function ForumScreen() {
   const { isLoggedIn, userName } = useAppContext();
+  const { t } = useLanguage(); // Add translation support
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [expandedPostId, setExpandedPostId] = useState<string | null>(null);
@@ -318,10 +319,9 @@ export default function ForumScreen() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold text-slate-800 mb-2">Community Forum</h1>
+      <h1 className="text-2xl font-bold text-slate-800 mb-2">{t('forum')}</h1>
       <p className="text-slate-600 mb-6">
-        Connect with others on their integration journey, share experiences, ask questions, 
-        and find support for your specific challenges.
+        {t('discussions')}. {t('share')} {t('yourProgress')}.
       </p>
       
       {/* Language Tabs */}
@@ -336,7 +336,7 @@ export default function ForumScreen() {
             }`}
           >
             <Globe className="inline-block h-4 w-4 mr-1.5" />
-            All Languages
+            {t('allCategories')}
           </button>
           
           <button
