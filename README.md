@@ -113,7 +113,7 @@ yarn dev
 **Lenny / Philipp**
 * Founder & Solana Developer @ Incentigrate
 * **Proven Solana Experience:** Led a community token project on Solana to a $4.7M peak market cap in early 2024.
-* **Community & Growth Expert:** Experienced Community Builder (Former Ecosystem Manager, MetaMuffin) with a strong background in e-Commerce and crypto investments.
+* **Community & Growth Expert:** Experienced Community Builder (Former Ecosystem Manager, MetaMuffin) with a strong background in e-commerce and crypto investments.
 * **Follow Our Journey on X/Twitter:** https://x.com/Incentigrate (1500+ followers)
 * **Get in Touch:** incentigrate@gmail.com
 * **Personal X** [Link](https://x.com/blockchainlenny)
