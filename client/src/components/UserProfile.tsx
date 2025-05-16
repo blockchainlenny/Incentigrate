@@ -4,6 +4,7 @@ import {
   User, Briefcase, GraduationCap, Languages, Mail, Phone, Home, 
   MapPin, Award, Edit, Plus, Calendar, Medal, BookOpen
 } from 'lucide-react';
+import BadgeShowcase from './BadgeShowcase';
 
 // Interface for the various sections in the profile
 interface WorkExperience {
@@ -332,8 +333,28 @@ export default function UserProfile() {
         )}
       </div>
       
-      {/* NFT Certificates */}
+      {/* Achievement Badges */}
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold text-slate-800">Achievement Badges</h2>
+          <span className="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+            On-Chain Rewards
+          </span>
+        </div>
+        
+        {/* Import the BadgeShowcase component */}
+        <div className="mb-6">
+          <BadgeShowcase 
+            showTitle={false} 
+            maxDisplay={10} 
+            onlyUnlocked={true}
+            size="md"
+          />
+        </div>
+      </div>
+      
+      {/* NFT Certificates */}
+      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mt-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold text-slate-800">Verified Certificates (NFTs)</h2>
           <span className="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded-full">

@@ -10,8 +10,10 @@ import {
   Gem, 
   ChevronDown, 
   ChevronUp,
-  AlertTriangle
+  AlertTriangle,
+  Trophy
 } from 'lucide-react';
+import ModuleBadges from './ModuleBadges';
 
 interface SingleModuleViewProps {
   moduleId: string;
@@ -293,11 +295,18 @@ export default function SingleModuleView({ moduleId, moduleTitle, onBackToList }
         })}
       </div>
       
+      {/* Progress Badges Section */}
+      {isLoggedIn && (
+        <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 mt-8">
+          <ModuleBadges moduleId={moduleId} module={module} />
+        </div>
+      )}
+      
       {/* Module Completion Section */}
       {isLoggedIn && isCompleted && (
         <div className="bg-green-50 border border-green-200 rounded-lg p-5 mt-8">
           <div className="flex items-center mb-2">
-            <CheckCircle className="h-6 w-6 text-green-600 mr-2" />
+            <Trophy className="h-6 w-6 text-green-600 mr-2" />
             <h3 className="text-lg font-semibold text-green-800">Module Completed!</h3>
           </div>
           <p className="text-green-700 mb-4">
