@@ -8,6 +8,9 @@ import WalletScreen from '../components/WalletScreen';
 import IntegrationJourneyScreen from '../components/IntegrationJourneyScreen';
 import LoginOptions from '../components/LoginOptions';
 import NavMenu from '../components/NavMenu';
+import QuestMap from '../components/QuestMap';
+import ActivityTracker from '../components/ActivityTracker';
+import DuolingoStyleLesson from '../components/DuolingoStyleLesson';
 
 export type ViewType = 
   | "dashboard" 
@@ -15,7 +18,10 @@ export type ViewType =
   | "single_module" 
   | "forum" 
   | "wallet" 
-  | "integration_journey";
+  | "integration_journey"
+  | "quests"
+  | "activity_tracker"
+  | "duolingo_lesson";
 
 export default function Home() {
   const { isLoggedIn, userName, oTokenBalance } = useAppContext();
@@ -31,6 +37,9 @@ export default function Home() {
     setCurrentView(view);
     window.scrollTo(0, 0);
   };
+
+  const [selectedLesson, setSelectedLesson] = useState<{ moduleId: string, lessonId: number } | null>(null);
+  const [selectedQuest, setSelectedQuest] = useState<string | null>(null);
 
   const renderContent = () => {
     switch (currentView) {
@@ -54,6 +63,37 @@ export default function Home() {
         return <WalletScreen />;
       case 'integration_journey':
         return <IntegrationJourneyScreen />;
+      case 'quests':
+        return <QuestMap onSelectQuest={(questId) => {
+          setSelectedQuest(questId);
+          // In a full implementation, we would navigate to the quest details/start screen
+          alert(`Starting Quest: ${questId}`);
+        }} />;
+      case 'activity_tracker':
+        return <ActivityTracker />;
+      case 'duolingo_lesson':
+        return selectedLesson ? (
+          <DuolingoStyleLesson
+            moduleId={selectedLesson.moduleId}
+            lessonId={selectedLesson.lessonId}
+            onComplete={() => {
+              // In a full implementation, we would update progress and award tokens
+              alert('Lesson completed! You earned tokens and XP.');
+              navigateTo('module_list');
+            }}
+            onExit={() => navigateTo('module_list')}
+          />
+        ) : (
+          <div className="bg-white p-8 rounded-lg shadow text-center">
+            <h3 className="text-lg font-medium text-slate-700 mb-4">No lesson selected</h3>
+            <button 
+              onClick={() => navigateTo('module_list')}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              Browse Learning Modules
+            </button>
+          </div>
+        );
       default:
         return <Dashboard navigateTo={navigateTo} />;
     }
