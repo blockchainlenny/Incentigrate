@@ -4,7 +4,6 @@ import { LanguageProvider } from './contexts/LanguageContext';
 import { Route, Switch } from 'wouter';
 import Home from './pages/Home';
 import NotFound from './pages/not-found';
-import LanguageToggle from './components/LanguageToggle';
 import './index.css';
 
 function Router() {

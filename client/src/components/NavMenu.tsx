@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAppContext } from '../contexts/AppContext';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage, languageFlags, languageNames } from '../contexts/LanguageContext';
+import { motion } from 'framer-motion';
 import { 
   LayoutDashboard, 
   BookOpen, 
@@ -12,7 +13,6 @@ import {
   Gem,
   Globe
 } from 'lucide-react';
-import LanguageToggle from './LanguageToggle';
 
 interface NavMenuProps {
   currentView: string;
@@ -21,7 +21,37 @@ interface NavMenuProps {
 
 export default function NavMenu({ currentView, navigateTo }: NavMenuProps) {
   const { isLoggedIn, userName, oTokenBalance, logout } = useAppContext();
-  const { t, currentLanguage } = useLanguage();
+  const { t, currentLanguage, toggleLanguage } = useLanguage();
+  const [isAnimating, setIsAnimating] = useState(false);
+  
+  // Flag animation variants
+  const flagVariants = {
+    initial: { 
+      scale: 1,
+      rotate: 0,
+      y: 0
+    },
+    animate: { 
+      scale: [1, 1.2, 1],
+      rotate: [0, 10, -10, 0],
+      y: [0, -10, 0],
+      transition: { 
+        duration: 0.8,
+        ease: "easeInOut" 
+      }
+    }
+  };
+  
+  // Handle language toggle with animation
+  const handleToggleLanguage = () => {
+    setIsAnimating(true);
+    toggleLanguage();
+    
+    // Reset animation state after animation completes
+    setTimeout(() => {
+      setIsAnimating(false);
+    }, 1000);
+  };
 
   const navItems = [
     { id: 'dashboard', label: t('dashboard'), icon: LayoutDashboard },
@@ -65,8 +95,23 @@ export default function NavMenu({ currentView, navigateTo }: NavMenuProps) {
           {/* User Info / Login Button */}
           <div className="flex items-center">
             {/* Language Toggle Button in navigation */}
-            <div className="mr-3 hidden md:block">
-              <LanguageToggle position="inline" showText={false} size="sm" />
+            <div className="mr-3 hidden md:flex items-center bg-blue-600/30 px-3 py-1.5 rounded-full">
+              <motion.span 
+                className="text-xl mr-2"
+                variants={flagVariants}
+                animate={isAnimating ? 'animate' : 'initial'}
+              >
+                {currentLanguage === 'en' ? '🇬🇧' : currentLanguage === 'de' ? '🇩🇪' : '🇸🇦'}
+              </motion.span>
+              <button 
+                onClick={handleToggleLanguage}
+                className="flex items-center text-slate-100 hover:text-white"
+              >
+                <Globe className="h-4 w-4 mr-1" />
+                <span className="text-sm font-medium">
+                  {currentLanguage === 'en' ? 'English' : currentLanguage === 'de' ? 'Deutsch' : 'العربية'}
+                </span>
+              </button>
             </div>
             
             {isLoggedIn ? (
@@ -121,8 +166,17 @@ export default function NavMenu({ currentView, navigateTo }: NavMenuProps) {
           
           {/* Mobile Language Toggle */}
           <div className="flex flex-col items-center">
-            <div className="p-2 rounded-full bg-blue-700/30 flex items-center justify-center">
-              <LanguageToggle position="inline" showText={false} size="sm" />
+            <div 
+              className="p-2 rounded-full bg-blue-700/30 flex items-center justify-center"
+              onClick={handleToggleLanguage}
+            >
+              <motion.span 
+                className="text-xl"
+                variants={flagVariants}
+                animate={isAnimating ? 'animate' : 'initial'}
+              >
+                {currentLanguage === 'en' ? '🇬🇧' : currentLanguage === 'de' ? '🇩🇪' : '🇸🇦'}
+              </motion.span>
             </div>
             <span className="text-xs mt-1 text-slate-200">
               {currentLanguage.toUpperCase()}
