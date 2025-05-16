@@ -261,8 +261,10 @@ export default function QuestMap({ onSelectQuest }: QuestMapProps) {
                 )}
               </div>
               
-              <div className={`p-4 rounded-lg border ${
-                quest.status === 'locked' ? 'border-slate-200 bg-slate-50' : 'border-blue-200 bg-blue-50'
+              <div 
+                onClick={() => quest.status !== 'locked' && onSelectQuest(quest.id)}
+                className={`p-4 rounded-lg border ${
+                quest.status === 'locked' ? 'border-slate-200 bg-slate-50' : 'border-blue-200 bg-blue-50 cursor-pointer hover:shadow-md transition-shadow'
               }`}>
                 <h3 className={`text-lg font-semibold ${
                   quest.status === 'locked' ? 'text-slate-500' : 'text-slate-800'
@@ -296,7 +298,9 @@ export default function QuestMap({ onSelectQuest }: QuestMapProps) {
                 quest.status === 'locked' ? 'border-slate-200' : 
                 quest.status === 'completed' ? 'border-green-200' :
                 quest.status === 'expired' ? 'border-red-200' : 'border-blue-200'
-              }`}
+              } ${quest.status !== 'locked' ? 'hover:shadow-md transition-shadow' : ''}`}
+              onClick={() => quest.status !== 'locked' && onSelectQuest(quest.id)}
+              style={{ cursor: quest.status !== 'locked' ? 'pointer' : 'default' }}
             >
               <div className="p-4">
                 <div className="flex items-start justify-between">
