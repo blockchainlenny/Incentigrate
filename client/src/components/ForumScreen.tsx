@@ -442,6 +442,11 @@ export default function ForumScreen() {
           }`}
           disabled={!isLoggedIn}
           title={isLoggedIn ? 'Start a new discussion' : 'Please log in to post'}
+          onClick={() => {
+            if (isLoggedIn) {
+              alert("Creating a new forum post! In a full implementation, this would open a form to create a new post.");
+            }
+          }}
         >
           <MessageCircle className="h-4 w-4 inline mr-1" />
           New Post
@@ -517,6 +522,79 @@ export default function ForumScreen() {
               {isExpanded && (
                 <div className="px-4 py-3 border-t border-slate-100">
                   <p className="text-slate-700 mb-4">{post.content}</p>
+                  
+                  {/* AI-generated replies section */}
+                  <div className="mt-6 space-y-4">
+                    <h4 className="font-medium text-slate-800 flex items-center gap-2">
+                      <MessageCircle className="h-4 w-4" /> 
+                      Replies ({post.replies})
+                    </h4>
+                    
+                    {/* Example replies - these would come from an API in a real app */}
+                    <div className="space-y-4 pl-2 border-l-2 border-slate-100">
+                      <div className="flex items-start gap-3">
+                        <img 
+                          src="https://api.dicebear.com/7.x/avataaars/svg?seed=KL&mouth=smile&eyes=happy&backgroundColor=b6e3f4" 
+                          alt="Karma L." 
+                          className="h-8 w-8 rounded-full mt-1" 
+                        />
+                        <div className="flex-1">
+                          <div className="flex items-center mb-1">
+                            <span className="font-medium text-slate-800 mr-2">Karma L.</span>
+                            <span className="text-xs text-slate-500">2 days ago</span>
+                          </div>
+                          <p className="text-sm text-slate-700">
+                            I just took the B1 exam last month! For the speaking portion, practice with a language partner as much as you can. I found an online language exchange and it really helped with my confidence.
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start gap-3">
+                        <img 
+                          src="https://api.dicebear.com/7.x/avataaars/svg?seed=JS&mouth=smile&eyes=happy&backgroundColor=b6e3f4" 
+                          alt="John S." 
+                          className="h-8 w-8 rounded-full mt-1" 
+                        />
+                        <div className="flex-1">
+                          <div className="flex items-center mb-1">
+                            <span className="font-medium text-slate-800 mr-2">John S.</span>
+                            <span className="text-xs text-slate-500">1 day ago</span>
+                          </div>
+                          <p className="text-sm text-slate-700">
+                            Make sure to review common everyday scenarios - like ordering at a restaurant, asking for directions, describing your job. I was asked to role play a situation at a doctor's office and was glad I had practiced medical vocabulary!
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Reply form */}
+                    {showReplyForm && (
+                      <div className="mt-6 bg-slate-50 p-3 rounded-md">
+                        <h4 className="font-medium text-slate-800 mb-2">Post a reply</h4>
+                        <textarea
+                          className="w-full border border-slate-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
+                          rows={3}
+                          placeholder="Write your reply..."
+                          value={replyContent}
+                          onChange={(e) => setReplyContent(e.target.value)}
+                        ></textarea>
+                        <div className="flex justify-end gap-2">
+                          <button 
+                            className="px-3 py-1 text-sm bg-slate-200 text-slate-700 rounded-md hover:bg-slate-300"
+                            onClick={() => setShowReplyForm(false)}
+                          >
+                            Cancel
+                          </button>
+                          <button 
+                            className="px-3 py-1 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                            onClick={() => submitReply(post.id)}
+                          >
+                            Post Reply
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
               
@@ -535,13 +613,22 @@ export default function ForumScreen() {
                     <Heart className={`h-4 w-4 mr-1 ${isLiked ? 'fill-current' : ''}`} />
                     <span>{post.likes + (isLiked ? 1 : 0)}</span>
                   </button>
-                  <button className="flex items-center text-sm text-slate-500 hover:text-slate-700">
+                  <button 
+                    className="flex items-center text-sm text-slate-500 hover:text-slate-700"
+                    onClick={() => handleReplyClick(post.id)}
+                  >
                     <MessageSquare className="h-4 w-4 mr-1" />
                     <span>{post.replies} replies</span>
                   </button>
                 </div>
                 <div>
-                  <button className="flex items-center text-sm text-slate-500 hover:text-slate-700">
+                  <button 
+                    className="flex items-center text-sm text-slate-500 hover:text-slate-700"
+                    onClick={() => {
+                      // In a real app, this would open a share dialog
+                      alert(`Share this post: ${post.title}`);
+                    }}
+                  >
                     <Share2 className="h-4 w-4 mr-1" />
                     <span>Share</span>
                   </button>
