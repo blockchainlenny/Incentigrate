@@ -41,7 +41,7 @@ Incentigrate is engineered to create shared experiences and unite people:
 1.  **Shared Experiences through $O Rewards:** $O tokens incentivize participation in local events, language tandems, cultural workshops, and community-organized meetups.
 2.  **Bridging Online & Offline:** Our platform facilitates initial online connections (forums, interest groups) that translate into real-world interactions and friendships.
 3.  **Community Building:** We provide a digital town square where newcomers and locals can connect, share, and support each other.
-4.  **Future Vision:** Experience Token Markets (e.g., token-gated local events) and smart venue reservations for community gatherings, further enhancing social interaction – directly aligning with Jägermeister's interest areas.
+4.  **Future Vision:** Experience Token Markets (e.g., token-gated local events) and smart venue reservations for community gatherings, further enhancing social interaction.
 
 ## ⭐ Key Features (Current MVP - Hackathon Scope)
 
@@ -81,7 +81,7 @@ Incentigrate is engineered to create shared experiences and unite people:
 * **Next Steps (Post-Hackathon):**
     1.  **Pilot Program:** Launch a pilot with a refugee center in Munich to gather real-world feedback.
     2.  **Full Solana Integration:** Implement the full on-chain `$O` tokenomics and reward system.
-    3.  **Partnership Development:** Secure partnerships with NGOs, government agencies (e.g., BAMF), and CSR-focused corporations (like Jägermeister).
+    3.  **Partnership Development:** Secure partnerships with NGOs, government agencies (e.g., BAMF), and CSR-focused corporations.
     4.  **Feature Expansion:** Develop more learning modules, advanced community features, and job-matching capabilities.
 
 *(Our comprehensive business model, market analysis, and growth strategy are detailed in our main Pitch Deck and Presentation Video.)*
