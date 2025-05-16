@@ -3,9 +3,12 @@ import { useAppContext } from '../contexts/AppContext';
 import { learningModules } from '../lib/data';
 import { 
   Gem, GraduationCap, BookOpen, MapPin, Clock, Trophy, Calendar,
-  Footprints, Lightbulb, CheckCircle, Medal, Users, Award, Flame
+  Footprints, Lightbulb, CheckCircle, Medal, Users, Award, Flame,
+  Smile, PartyPopper, Star
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import PersonalizedRecommendations from './PersonalizedRecommendations';
+import AnimatedIcon from './AnimatedIcon';
 
 interface DashboardProps {
   navigateTo: (view: any, moduleId?: string, moduleTitle?: string) => void;
@@ -68,26 +71,97 @@ export default function Dashboard({ navigateTo }: DashboardProps) {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-slate-200 flex flex-col items-center">
-              <GraduationCap className="h-8 w-8 text-blue-500 mb-2" />
+            <motion.div 
+              whileHover={{ scale: 1.03 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              className="bg-white p-4 rounded-lg shadow-sm border border-slate-200 flex flex-col items-center cursor-pointer"
+              onClick={() => navigateTo('module_list')}
+            >
+              <AnimatedIcon 
+                icon={<GraduationCap />}
+                size="lg"
+                color="text-blue-500" 
+                hoverEffect="bounce"
+                className="mb-2"
+              />
               <p className="text-sm text-slate-500">Learning Modules</p>
               <p className="text-2xl font-bold text-slate-800">{learningModules.length}</p>
-            </div>
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-slate-200 flex flex-col items-center">
-              <Trophy className="h-8 w-8 text-amber-500 mb-2" />
+            </motion.div>
+            
+            <motion.div 
+              whileHover={{ scale: 1.03 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              className="bg-white p-4 rounded-lg shadow-sm border border-slate-200 flex flex-col items-center cursor-pointer"
+              onClick={() => navigateTo('module_list')}
+            >
+              <AnimatedIcon 
+                icon={<Trophy />}
+                size="lg"
+                color="text-amber-500" 
+                hoverEffect="pulse"
+                className="mb-2"
+                autoAnimate={totalProgressData.modulesClaimed > 0}
+                interval={5000}
+              />
               <p className="text-sm text-slate-500">Modules Completed</p>
               <p className="text-2xl font-bold text-slate-800">{totalProgressData.modulesClaimed}</p>
-            </div>
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
+              {totalProgressData.modulesClaimed > 0 && (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="mt-1 px-2 py-0.5 bg-amber-100 rounded-full"
+                >
+                  <span className="text-xs font-medium text-amber-700 flex items-center">
+                    <Smile className="h-3 w-3 mr-1" />
+                    Great progress!
+                  </span>
+                </motion.div>
+              )}
+            </motion.div>
+            
+            <motion.div 
+              whileHover={{ scale: 1.03 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              className="bg-white p-4 rounded-lg shadow-sm border border-slate-200 cursor-pointer"
+              onClick={() => navigateTo('module_list')}
+            >
               <div className="flex flex-col items-center">
-                <BookOpen className="h-8 w-8 text-teal-500 mb-2" />
+                <AnimatedIcon 
+                  icon={<BookOpen />}
+                  size="lg"
+                  color="text-teal-500" 
+                  hoverEffect="wiggle"
+                  className="mb-2"
+                />
                 <p className="text-sm text-slate-500">Progress Status</p>
-                <p className="text-2xl font-bold text-slate-800">
+                <motion.p 
+                  className="text-2xl font-bold text-slate-800"
+                  initial={{ scale: 1 }}
+                  animate={{ 
+                    scale: [1, 1.1, 1],
+                    transition: { 
+                      duration: 0.5, 
+                      repeat: totalProgressData.completed > 0 ? 1 : 0, 
+                      repeatDelay: 1 
+                    }
+                  }}
+                >
                   {totalProgressData.total === 0 
                     ? '0%' 
                     : Math.round((totalProgressData.completed / totalProgressData.total) * 100) + '%'
                   }
-                </p>
+                </motion.p>
+                {totalProgressData.completed > 0 && (
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                    className="flex items-center mt-1 text-xs font-medium text-teal-600"
+                  >
+                    <PartyPopper className="h-3 w-3 mr-1" />
+                    <span>Keep it up!</span>
+                  </motion.div>
+                )}
               </div>
               
               {/* Active modules progress indicator */}
@@ -133,62 +207,111 @@ export default function Dashboard({ navigateTo }: DashboardProps) {
                     </div>
                   )}
               </div>
-            </div>
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-slate-200 flex flex-col items-center">
-              <Calendar className="h-8 w-8 text-purple-500 mb-2" />
+            </motion.div>
+            
+            <motion.div 
+              whileHover={{ scale: 1.03 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              className="bg-white p-4 rounded-lg shadow-sm border border-slate-200 flex flex-col items-center"
+            >
+              <AnimatedIcon 
+                icon={<Calendar />}
+                size="lg"
+                color="text-purple-500" 
+                hoverEffect="bounce"
+                className="mb-2"
+              />
               <p className="text-sm text-slate-500">Member Since</p>
               <p className="text-2xl font-bold text-slate-800">May 2023</p>
-            </div>
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                className="mt-1 px-2 py-0.5 bg-purple-100 rounded-full"
+              >
+                <span className="text-xs font-medium text-purple-700 flex items-center">
+                  <Star className="h-3 w-3 mr-1" />
+                  2 Years Strong!
+                </span>
+              </motion.div>
+            </motion.div>
           </div>
         )}
       </div>
 
       {/* Quick Actions Section */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div 
+        <motion.div 
+          whileHover={{ 
+            scale: 1.02,
+            boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
+          }}
           onClick={() => navigateTo('module_list')}
-          className="bg-white p-5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer"
+          className="bg-white p-5 rounded-xl shadow-sm border border-slate-200 transition-shadow cursor-pointer"
         >
           <div className="flex items-center mb-3">
             <div className="p-2 bg-blue-50 rounded-lg">
-              <BookOpen className="h-6 w-6 text-blue-600" />
+              <AnimatedIcon 
+                icon={<BookOpen />}
+                size="md"
+                color="text-blue-600" 
+                hoverEffect="pulse"
+              />
             </div>
             <h3 className="ml-3 font-medium text-lg text-slate-800">Learning Modules</h3>
           </div>
           <p className="text-slate-600 text-sm">
             Access language courses, cultural integration materials, and skill training modules.
           </p>
-        </div>
+        </motion.div>
         
-        <div 
+        <motion.div 
+          whileHover={{ 
+            scale: 1.02,
+            boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
+          }}
           onClick={() => navigateTo('integration_journey')}
-          className="bg-white p-5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer"
+          className="bg-white p-5 rounded-xl shadow-sm border border-slate-200 transition-shadow cursor-pointer"
         >
           <div className="flex items-center mb-3">
             <div className="p-2 bg-green-50 rounded-lg">
-              <MapPin className="h-6 w-6 text-green-600" />
+              <AnimatedIcon 
+                icon={<MapPin />}
+                size="md"
+                color="text-green-600" 
+                hoverEffect="bounce"
+              />
             </div>
             <h3 className="ml-3 font-medium text-lg text-slate-800">Integration Steps</h3>
           </div>
           <p className="text-slate-600 text-sm">
             Track your integration journey - from registration to employment, housing, and more.
           </p>
-        </div>
+        </motion.div>
         
-        <div 
+        <motion.div 
+          whileHover={{ 
+            scale: 1.02,
+            boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
+          }}
           onClick={() => navigateTo('forum')}
-          className="bg-white p-5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer"
+          className="bg-white p-5 rounded-xl shadow-sm border border-slate-200 transition-shadow cursor-pointer"
         >
           <div className="flex items-center mb-3">
             <div className="p-2 bg-amber-50 rounded-lg">
-              <Clock className="h-6 w-6 text-amber-600" />
+              <AnimatedIcon 
+                icon={<Users />}
+                size="md"
+                color="text-amber-600" 
+                hoverEffect="wiggle"
+              />
             </div>
             <h3 className="ml-3 font-medium text-lg text-slate-800">Community Forum</h3>
           </div>
           <p className="text-slate-600 text-sm">
             Connect with others, ask questions, share experiences, and find local support.
           </p>
-        </div>
+        </motion.div>
       </div>
 
       {/* New Learning Features */}
@@ -196,10 +319,20 @@ export default function Dashboard({ navigateTo }: DashboardProps) {
         <h2 className="text-xl font-medium text-slate-800 mb-4">New Learning Features</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Duolingo-Style Lessons */}
-          <div className="p-4 rounded-lg border border-blue-200 bg-blue-50">
+          <motion.div 
+            whileHover={{ scale: 1.02 }}
+            className="p-4 rounded-lg border border-blue-200 bg-blue-50"
+          >
             <div className="flex items-center mb-3">
               <div className="p-2 bg-blue-100 rounded-full">
-                <Lightbulb className="h-5 w-5 text-blue-600" />
+                <AnimatedIcon 
+                  icon={<Lightbulb />}
+                  size="sm"
+                  color="text-blue-600" 
+                  hoverEffect="pulse"
+                  autoAnimate={true}
+                  interval={4000}
+                />
               </div>
               <h3 className="ml-3 font-medium text-slate-800">Interactive Lessons</h3>
             </div>
@@ -209,19 +342,31 @@ export default function Dashboard({ navigateTo }: DashboardProps) {
             <p className="text-sm text-slate-600 mb-3">
               Learn with fun, interactive exercises in a Duolingo-style interface. Practice language skills and earn rewards as you progress.
             </p>
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => navigateTo('duolingo_lesson')}
               className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
             >
               Try a Lesson
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
           
           {/* Quests */}
-          <div className="p-4 rounded-lg border border-amber-200 bg-amber-50">
+          <motion.div 
+            whileHover={{ scale: 1.02 }}
+            className="p-4 rounded-lg border border-amber-200 bg-amber-50"
+          >
             <div className="flex items-center mb-3">
               <div className="p-2 bg-amber-100 rounded-full">
-                <Trophy className="h-5 w-5 text-amber-600" />
+                <AnimatedIcon 
+                  icon={<Trophy />}
+                  size="sm"
+                  color="text-amber-600" 
+                  hoverEffect="bounce"
+                  autoAnimate={true}
+                  interval={6000}
+                />
               </div>
               <h3 className="ml-3 font-medium text-slate-800">Quest Map</h3>
             </div>
@@ -231,19 +376,31 @@ export default function Dashboard({ navigateTo }: DashboardProps) {
             <p className="text-sm text-slate-600 mb-3">
               Complete quests to earn rewards and advance your integration journey through fun, interactive challenges.
             </p>
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => navigateTo('quests')}
               className="w-full py-2 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg transition-colors"
             >
               Start Quests
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
           
           {/* Activity Tracking */}
-          <div className="p-4 rounded-lg border border-emerald-200 bg-emerald-50">
+          <motion.div 
+            whileHover={{ scale: 1.02 }}
+            className="p-4 rounded-lg border border-emerald-200 bg-emerald-50"
+          >
             <div className="flex items-center mb-3">
               <div className="p-2 bg-emerald-100 rounded-full">
-                <Footprints className="h-5 w-5 text-emerald-600" />
+                <AnimatedIcon 
+                  icon={<Footprints />}
+                  size="sm"
+                  color="text-emerald-600" 
+                  hoverEffect="wiggle"
+                  autoAnimate={true}
+                  interval={5000}
+                />
               </div>
               <h3 className="ml-3 font-medium text-slate-800">Activity Tracker</h3>
             </div>
@@ -253,13 +410,15 @@ export default function Dashboard({ navigateTo }: DashboardProps) {
             <p className="text-sm text-slate-600 mb-3">
               Log your real-world integration activities and earn rewards for attending classes, appointments, and community events.
             </p>
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => navigateTo('activity_tracker')}
               className="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors"
             >
               Track Activities
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
         </div>
       </div>
 
