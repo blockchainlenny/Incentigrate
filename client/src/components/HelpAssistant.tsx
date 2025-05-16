@@ -42,24 +42,18 @@ export default function HelpAssistant({
   const [isOpen, setIsOpen] = useState(false);
   const [tipIndex, setTipIndex] = useState(0);
   
-  // Check sessionStorage on initial load - but only show once per session
+  // On component mount, check if we should show bubble
   useEffect(() => {
-    const hasSeenBubble = sessionStorage.getItem(bubbleKey) === 'seen';
-    const hasSeenAny = sessionStorage.getItem('help_bubbles_global') === 'seen';
+    // First visit detection - show only one bubble per app session
+    const hasSeenAnyBubbles = localStorage.getItem('help_bubbles_global') === 'seen';
     
-    // Only auto-show if:
-    // 1. autoShow prop is true AND
-    // 2. This specific context bubble hasn't been seen AND
-    // 3. We're not constantly popping up bubbles when navigating
-    if (autoShow && !hasSeenBubble && !hasSeenAny) {
+    // Only auto-show if this is the first time the user is seeing any bubble
+    if (autoShow && !hasSeenAnyBubbles) {
       setIsOpen(true);
-      // Mark that we've shown at least one bubble this session
-      sessionStorage.setItem('help_bubbles_global', 'seen');
+      // Mark globally that we've shown a bubble
+      localStorage.setItem('help_bubbles_global', 'seen');
     }
-    
-    // Mark this specific context as seen
-    sessionStorage.setItem(bubbleKey, 'seen');
-  }, [autoShow, bubbleKey]);
+  }, []); // Empty dependency array - only run on mount
   
   // Character personality traits
   const characterName = "Inti";

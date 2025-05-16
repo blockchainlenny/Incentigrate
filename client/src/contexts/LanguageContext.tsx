@@ -231,6 +231,11 @@ const translations: Record<Language, Record<string, string>> = {
     profile: 'الملف الشخصي',
     logout: 'تسجيل خروج',
     connectWallet: 'ربط المحفظة',
+    helpAssistant: 'مساعد المساعدة',
+    learnMore: 'تعلم المزيد',
+    next: 'التالي',
+    previous: 'السابق',
+    close: 'إغلاق',
     
     // Dashboard
     welcomeBack: 'مرحبًا بعودتك',
