@@ -1,267 +1,304 @@
-import { useAppContext } from "@/contexts/AppContext";
-import { Wallet, Coins, BookMarked, CheckIcon, MessageSquare, UserPlus } from "lucide-react";
+import React, { useState } from 'react';
+import { useAppContext } from '../contexts/AppContext';
+import { Wallet, Send, ArrowDownCircle, RefreshCw, Copy, ExternalLink } from 'lucide-react';
 
 export default function WalletScreen() {
-  const { isLoggedIn, login, oTokenBalance, walletAddress, loginType } = useAppContext();
-
-  const connectWallet = (type: 'phantom' | 'solflare') => {
-    login(type);
+  const { isLoggedIn, oTokenBalance, userName, loginType, walletAddress } = useAppContext();
+  const { login, logout } = useAppContext();
+  
+  const [isTransferring, setIsTransferring] = useState(false);
+  const [transferAmount, setTransferAmount] = useState("");
+  const [recipientAddress, setRecipientAddress] = useState("");
+  
+  const handleCopyAddress = () => {
+    if (walletAddress) {
+      navigator.clipboard.writeText(walletAddress);
+      alert("Wallet address copied to clipboard");
+    }
   };
   
-  const connectSocial = (type: 'google' | 'email') => {
-    login(type);
+  const handleTransfer = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsTransferring(true);
+    
+    // Simulate transaction processing
+    setTimeout(() => {
+      setIsTransferring(false);
+      setTransferAmount("");
+      setRecipientAddress("");
+      alert(`Transfer of ${transferAmount} $O tokens simulated.`);
+    }, 2000);
   };
+  
+  const formatWalletAddress = (address: string | null) => {
+    if (!address) return '';
+    return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
+  };
+  
+  const transactionHistory = [
+    { 
+      id: 'tx1', 
+      type: 'Reward', 
+      amount: 50, 
+      date: '2023-05-14', 
+      description: 'Completion of "German Basics" module' 
+    },
+    { 
+      id: 'tx2', 
+      type: 'Reward', 
+      amount: 10, 
+      date: '2023-05-10', 
+      description: 'Completed "Residence Registration" step' 
+    },
+    { 
+      id: 'tx3', 
+      type: 'Reward', 
+      amount: 30, 
+      date: '2023-05-05', 
+      description: 'Completed "Digital Tools" module' 
+    }
+  ];
 
   return (
-    <div className="container mx-auto px-4 py-6 max-w-6xl">
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-slate-900">Your Digital Wallet</h1>
-        <p className="text-slate-600">Manage your Incentigrate tokens and transactions</p>
-      </div>
+    <div className="max-w-4xl mx-auto">
+      <h1 className="text-2xl font-bold text-slate-800 mb-6">Wallet & Rewards</h1>
       
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left column */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Wallet Card */}
-          <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-slate-200">
-            <div className="bg-gradient-to-r from-themeBlue to-themeGreen p-6 text-white">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h2 className="text-lg font-semibold opacity-90 mb-1">Incentigrate Balance</h2>
-                  <p className="text-3xl font-bold">{oTokenBalance} $O</p>
-                  <p className="mt-1 text-sm opacity-90">
-                    {isLoggedIn 
-                      ? `Connected via ${loginType} • ${walletAddress?.slice(0, 6)}...${walletAddress?.slice(-4)}` 
-                      : "Connect your wallet to manage tokens"}
-                  </p>
-                </div>
-                <div className="bg-white/20 p-3 rounded-full">
-                  <Coins className="h-6 w-6" />
-                </div>
-              </div>
+      {!isLoggedIn ? (
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6">
+          <div className="flex flex-col items-center text-center p-6">
+            <Wallet className="h-16 w-16 text-slate-400 mb-4" />
+            <h2 className="text-xl font-semibold text-slate-700 mb-2">Connect Your Wallet</h2>
+            <p className="text-slate-600 mb-6 max-w-md">
+              Connect your wallet to track your integration progress and earn $O tokens for completed integration steps and learning modules.
+            </p>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-md mb-4">
+              <button 
+                onClick={() => login('phantom')}
+                className="flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors"
+              >
+                <img src="https://phantom.app/img/logo.png" alt="Phantom" className="h-5 w-5" />
+                <span>Phantom</span>
+              </button>
+              
+              <button 
+                onClick={() => login('solflare')}
+                className="flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-medium py-2.5 px-4 rounded-lg transition-colors"
+              >
+                <svg className="h-5 w-5" viewBox="0 0 30 30" fill="currentColor">
+                  <circle cx="15" cy="15" r="15" fill="currentColor" />
+                  <path d="M9 12.5l2.5-2.5-2.5-2.5L6.5 10 9 12.5zM15 18.5l2.5-2.5-2.5-2.5-2.5 2.5 2.5 2.5zM15 8.5l2.5-2.5-2.5-2.5-2.5 2.5L15 8.5zM21 12.5l2.5-2.5-2.5-2.5-2.5 2.5L21 12.5z" fill="#FFF" />
+                </svg>
+                <span>Solflare</span>
+              </button>
             </div>
-            <div className="p-6">
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button 
-                  onClick={() => connectWallet('phantom')}
-                  disabled={isLoggedIn}
-                  className={`flex-1 ${
-                    isLoggedIn 
-                      ? "bg-slate-300 cursor-not-allowed" 
-                      : "bg-themeBlue hover:bg-blue-700"
-                  } text-white font-medium py-2 rounded-md transition-colors flex items-center justify-center gap-2`}
-                >
-                  <Wallet className="h-4 w-4" />
-                  <span>{isLoggedIn ? "Connected" : "Connect Wallet"}</span>
-                </button>
-                {!isLoggedIn && (
-                  <button 
-                    onClick={() => connectSocial('google')}
-                    className="flex-1 border border-slate-300 text-slate-700 hover:bg-slate-50 font-medium py-2 rounded-md transition-colors flex items-center justify-center gap-2"
-                  >
-                    <User className="h-4 w-4" />
-                    <span>Create Social Wallet</span>
-                  </button>
-                )}
-              </div>
+            
+            <div className="text-sm text-slate-500 mb-4">Or connect with</div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-md">
+              <button 
+                onClick={() => login('google')}
+                className="flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-800 font-medium py-2.5 px-4 rounded-lg border border-slate-300 transition-colors"
+              >
+                <svg className="h-5 w-5 text-red-500" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+                </svg>
+                <span>Google</span>
+              </button>
+              
+              <button 
+                onClick={() => login('email')}
+                className="flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-800 font-medium py-2.5 px-4 rounded-lg border border-slate-300 transition-colors"
+              >
+                <svg className="h-5 w-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                <span>Email</span>
+              </button>
             </div>
-          </div>
-          
-          {!isLoggedIn && (
-            <>
-              {/* Wallet Connection Options */}
-              <div className="bg-white rounded-xl shadow-sm p-6 border border-slate-200">
-                <h2 className="text-lg font-semibold text-slate-900 mb-4">Connect Your Wallet</h2>
-                <div className="space-y-4">
-                  <button 
-                    onClick={() => connectWallet('phantom')}
-                    className="w-full flex items-center justify-between p-4 border border-slate-200 rounded-lg hover:border-themeBlue transition-colors"
-                  >
-                    <div className="flex items-center gap-3">
-                      <img src="https://phantom.app/img/logo.png" alt="Phantom Wallet" className="w-10 h-10" />
-                      <div className="text-left">
-                        <h3 className="font-medium text-slate-800">Phantom</h3>
-                        <p className="text-xs text-slate-500">Popular Solana wallet with browser extension and mobile app</p>
-                      </div>
-                    </div>
-                    <ArrowRight className="h-4 w-4 text-slate-400" />
-                  </button>
-                  
-                  <button 
-                    onClick={() => connectWallet('solflare')}
-                    className="w-full flex items-center justify-between p-4 border border-slate-200 rounded-lg hover:border-themeBlue transition-colors"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white">
-                        <Wallet className="h-5 w-5" />
-                      </div>
-                      <div className="text-left">
-                        <h3 className="font-medium text-slate-800">Solflare</h3>
-                        <p className="text-xs text-slate-500">Secure Solana wallet with hardware wallet support</p>
-                      </div>
-                    </div>
-                    <ArrowRight className="h-4 w-4 text-slate-400" />
-                  </button>
-                </div>
-                
-                <div className="mt-6">
-                  <div className="relative flex items-center py-4">
-                    <div className="flex-grow border-t border-slate-200"></div>
-                    <span className="flex-shrink mx-4 text-slate-400 text-sm">or create a social wallet</span>
-                    <div className="flex-grow border-t border-slate-200"></div>
-                  </div>
-                  
-                  <p className="text-sm text-slate-600 mb-4">Don't have a crypto wallet? Create a simplified wallet using your social accounts:</p>
-                  
-                  <div className="space-y-3">
-                    <button 
-                      onClick={() => connectSocial('google')}
-                      className="w-full flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-800 font-medium py-3 px-4 rounded-lg border border-slate-300 transition-colors"
-                    >
-                      <GoogleIcon className="text-red-500 h-5 w-5" />
-                      <span>Continue with Google</span>
-                    </button>
-                    
-                    <button 
-                      onClick={() => connectSocial('email')}
-                      className="w-full flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-800 font-medium py-3 px-4 rounded-lg border border-slate-300 transition-colors"
-                    >
-                      <Mail className="text-blue-500 h-5 w-5" />
-                      <span>Sign up with Email</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
-          
-          {/* Transactions (Empty State) */}
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-slate-200">
-            <h2 className="text-lg font-semibold text-slate-900 mb-4">Recent Transactions</h2>
-            <div className="text-center py-8">
-              <div className="mx-auto bg-slate-100 rounded-full w-16 h-16 flex items-center justify-center mb-3">
-                <History className="h-8 w-8 text-slate-400" />
-              </div>
-              <h3 className="text-lg font-medium text-slate-800 mb-2">No transactions yet</h3>
-              <p className="text-sm text-slate-600 max-w-md mx-auto">
-                Connect your wallet and start earning tokens by completing learning modules and integration steps.
+            
+            <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200 text-sm text-blue-700 max-w-md">
+              <p>
+                <strong>Note:</strong> This is a demonstration. In a live version, you would connect with actual 
+                cryptocurrency wallets to store and manage your $O tokens on the Solana blockchain.
               </p>
             </div>
           </div>
         </div>
-        
-        {/* Right column */}
-        <div className="lg:col-span-1 space-y-6">
-          {/* Earn Tokens Card */}
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-slate-200">
-            <h2 className="text-lg font-semibold text-slate-900 mb-3">How to Earn Tokens</h2>
-            <ul className="space-y-4">
-              <li className="flex items-start gap-3">
-                <div className="bg-green-100 text-green-700 p-1.5 rounded-full mt-0.5">
-                  <BookMarked className="h-4 w-4" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-slate-800 text-sm">Complete Learning Modules</h3>
-                  <p className="text-xs text-slate-600">Earn 45-55 $O tokens for finishing each module</p>
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <div className="bg-blue-100 text-blue-700 p-1.5 rounded-full mt-0.5">
-                  <CheckIcon className="h-4 w-4" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-slate-800 text-sm">Finish Integration Steps</h3>
-                  <p className="text-xs text-slate-600">Earn 3-20 $O tokens per completed official step</p>
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <div className="bg-yellow-100 text-yellow-700 p-1.5 rounded-full mt-0.5">
-                  <MessageSquare className="h-4 w-4" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-slate-800 text-sm">Participate in Forum</h3>
-                  <p className="text-xs text-slate-600">Earn 1-5 $O tokens for helpful contributions</p>
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <div className="bg-purple-100 text-purple-700 p-1.5 rounded-full mt-0.5">
-                  <UserPlus className="h-4 w-4" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-slate-800 text-sm">Refer Friends</h3>
-                  <p className="text-xs text-slate-600">Earn 10 $O tokens for each new user you refer</p>
-                </div>
-              </li>
-            </ul>
-          </div>
-          
-          {/* Token Usage Card */}
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-slate-200">
-            <h2 className="text-lg font-semibold text-slate-900 mb-3">Using Your Tokens</h2>
-            <p className="text-sm text-slate-600 mb-4">$O tokens can be used for various benefits within the Incentigrate ecosystem:</p>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-2">
-                <CheckIcon className="h-4 w-4 text-themeGreen mt-1" />
-                <span className="text-sm text-slate-700">Unlock premium learning content</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckIcon className="h-4 w-4 text-themeGreen mt-1" />
-                <span className="text-sm text-slate-700">Exchange for services with partner providers</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckIcon className="h-4 w-4 text-themeGreen mt-1" />
-                <span className="text-sm text-slate-700">Access to exclusive community events</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckIcon className="h-4 w-4 text-themeGreen mt-1" />
-                <span className="text-sm text-slate-700">Transfer to other cryptocurrency wallets</span>
-              </li>
-            </ul>
-          </div>
-          
-          {/* FAQ Card */}
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-slate-200">
-            <h2 className="text-lg font-semibold text-slate-900 mb-3">Wallet FAQ</h2>
-            <div className="space-y-4">
+      ) : (
+        <>
+          <div className="bg-gradient-to-br from-sky-600 to-blue-700 rounded-xl shadow-md p-6 mb-6 text-white">
+            <div className="flex flex-col md:flex-row justify-between">
               <div>
-                <h3 className="font-medium text-slate-800 text-sm mb-1">What are $O tokens?</h3>
-                <p className="text-xs text-slate-600">$O (Opportunity) tokens are digital rewards for completing integration activities on the platform.</p>
+                <p className="text-blue-100 mb-1">Connected as</p>
+                <h2 className="text-xl font-bold mb-2">{userName}</h2>
+                <div className="flex items-center mb-1 text-sm">
+                  <p className="text-blue-100 mr-1">Wallet:</p>
+                  <p className="font-mono">{formatWalletAddress(walletAddress)}</p>
+                  <button 
+                    onClick={handleCopyAddress}
+                    className="bg-blue-800/30 hover:bg-blue-800/50 p-1 rounded ml-2 text-blue-100"
+                    title="Copy address"
+                  >
+                    <Copy className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+                <p className="text-sm text-blue-100">via {loginType}</p>
               </div>
-              <div>
-                <h3 className="font-medium text-slate-800 text-sm mb-1">Are crypto wallets safe?</h3>
-                <p className="text-xs text-slate-600">Yes, when used correctly. Always keep your secret recovery phrase private and never share it.</p>
+              
+              <div className="mt-6 md:mt-0 flex flex-col items-center md:items-end">
+                <p className="text-blue-100 text-sm">$O Token Balance</p>
+                <h3 className="text-3xl font-bold mb-2">{oTokenBalance} $O</h3>
+                <button 
+                  className="text-sm flex items-center bg-white/10 hover:bg-white/20 px-3 py-1 rounded-full transition-colors"
+                  onClick={() => logout()}
+                >
+                  <span className="mr-1">Disconnect</span>
+                </button>
               </div>
-              <div>
-                <h3 className="font-medium text-slate-800 text-sm mb-1">What's a social wallet?</h3>
-                <p className="text-xs text-slate-600">A simplified crypto wallet that uses your Google or email account for authentication.</p>
-              </div>
-              <a href="#" className="text-themeBlue hover:text-themeGreen text-sm font-medium inline-flex items-center gap-1 mt-2">
-                <span>View all FAQs</span>
-                <ArrowRight className="h-4 w-4" />
-              </a>
             </div>
           </div>
-        </div>
-      </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6">
+                <h2 className="text-lg font-semibold text-slate-800 mb-4">Transaction History</h2>
+                
+                {transactionHistory.length > 0 ? (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="bg-slate-50">
+                          <th className="text-left px-4 py-2 rounded-l-lg">Type</th>
+                          <th className="text-left px-4 py-2">Description</th>
+                          <th className="text-right px-4 py-2">Amount</th>
+                          <th className="text-right px-4 py-2 rounded-r-lg">Date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {transactionHistory.map((tx) => (
+                          <tr key={tx.id} className="border-b border-slate-100">
+                            <td className="px-4 py-3">
+                              <span className="flex items-center">
+                                <ArrowDownCircle className="h-4 w-4 text-green-500 mr-1" />
+                                {tx.type}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3 text-slate-700">{tx.description}</td>
+                            <td className="px-4 py-3 text-right font-medium text-green-600">+{tx.amount} $O</td>
+                            <td className="px-4 py-3 text-right text-slate-500">{tx.date}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <p className="text-slate-500">No transactions yet</p>
+                    <p className="text-sm text-slate-400 mt-1">
+                      Complete learning modules and integration steps to earn $O tokens
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            <div className="lg:col-span-1">
+              <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6">
+                <h2 className="text-lg font-semibold text-slate-800 mb-4">Transfer Tokens</h2>
+                
+                <form onSubmit={handleTransfer}>
+                  <div className="mb-4">
+                    <label htmlFor="amount" className="block text-sm font-medium text-slate-700 mb-1">
+                      Amount ($O)
+                    </label>
+                    <input
+                      type="number"
+                      id="amount"
+                      className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Enter amount"
+                      value={transferAmount}
+                      onChange={(e) => setTransferAmount(e.target.value)}
+                      required
+                      min="1"
+                      max={oTokenBalance.toString()}
+                    />
+                  </div>
+                  
+                  <div className="mb-6">
+                    <label htmlFor="recipient" className="block text-sm font-medium text-slate-700 mb-1">
+                      Recipient Address
+                    </label>
+                    <input
+                      type="text"
+                      id="recipient"
+                      className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="e.g. 8zH5G..."
+                      value={recipientAddress}
+                      onChange={(e) => setRecipientAddress(e.target.value)}
+                      required
+                    />
+                  </div>
+                  
+                  <button
+                    type="submit"
+                    className="w-full flex justify-center items-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
+                    disabled={isTransferring || !transferAmount || !recipientAddress}
+                  >
+                    {isTransferring ? (
+                      <>
+                        <RefreshCw className="h-4 w-4 animate-spin mr-2" />
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="h-4 w-4 mr-2" />
+                        Send Tokens
+                      </>
+                    )}
+                  </button>
+                </form>
+                
+                <div className="mt-6 border-t border-slate-200 pt-4">
+                  <h3 className="text-sm font-medium text-slate-700 mb-3">Use $O Tokens For:</h3>
+                  <ul className="text-sm text-slate-600 space-y-2">
+                    <li className="flex items-start">
+                      <span className="text-blue-500 mr-2">•</span>
+                      <span>Access premium integration services</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-blue-500 mr-2">•</span>
+                      <span>Community marketplace purchases</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-blue-500 mr-2">•</span>
+                      <span>Unlocking advanced learning modules</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <h2 className="text-lg font-semibold text-slate-800 mb-4">Learn About $O Token</h2>
+                <p className="text-sm text-slate-600 mb-4">
+                  The $O token powers the Incentigrate ecosystem and rewards refugees for completing integration steps.
+                </p>
+                <a 
+                  href="#"
+                  className="text-blue-600 hover:text-blue-800 text-sm flex items-center"
+                >
+                  <ExternalLink className="h-3.5 w-3.5 mr-1" />
+                  <span>Learn more about tokenomics</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
-
-// Additional icons
-const GoogleIcon = ({ className }: { className?: string }) => (
-  <svg className={className} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M18.1711 8.36788H17.5V8.33329H10V11.6666H14.6856C14.0159 13.6501 12.1719 15.0001 10 15.0001C7.23859 15.0001 5.00003 12.7616 5.00003 10.0001C5.00003 7.23873 7.23859 5.00017 10 5.00017C11.2747 5.00017 12.4345 5.48017 13.317 6.27345L15.6741 3.91629C14.1826 2.52516 12.1997 1.66683 10 1.66683C5.39771 1.66683 1.66669 5.39786 1.66669 10.0001C1.66669 14.6024 5.39771 18.3335 10 18.3335C14.6023 18.3335 18.3334 14.6024 18.3334 10.0001C18.3334 9.44302 18.2738 8.89788 18.1711 8.36788Z" fill="currentColor" />
-  </svg>
-);
-
-const Mail = ({ className }: { className?: string }) => (
-  <svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M22 6C22 4.9 21.1 4 20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6ZM20 6L12 11L4 6H20ZM20 18H4V8L12 13L20 8V18Z" fill="currentColor" />
-  </svg>
-);
-
-const History = ({ className }: { className?: string }) => (
-  <svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M13 3C8.03 3 4 7.03 4 12H1L4.89 15.89L4.96 16.03L9 12H6C6 8.13 9.13 5 13 5C16.87 5 20 8.13 20 12C20 15.87 16.87 19 13 19C11.07 19 9.32 18.21 8.06 16.94L6.64 18.36C8.27 19.99 10.51 21 13 21C17.97 21 22 16.97 22 12C22 7.03 17.97 3 13 3ZM12 8V13L16.28 15.54L17 14.33L13.5 12.25V8H12Z" fill="currentColor" />
-  </svg>
-);
