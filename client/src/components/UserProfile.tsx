@@ -5,6 +5,8 @@ import {
   MapPin, Award, Edit, Plus, Calendar, Medal, BookOpen
 } from 'lucide-react';
 import BadgeShowcase from './BadgeShowcase';
+import HelpAssistant from './HelpAssistant';
+import { useLanguage } from '../contexts/LanguageContext';
 
 // Interface for the various sections in the profile
 interface WorkExperience {
@@ -51,6 +53,7 @@ interface Certificate {
 
 export default function UserProfile() {
   const { isLoggedIn, userName, walletAddress, oTokenBalance } = useAppContext();
+  const { t, currentLanguage } = useLanguage();
   const [editMode, setEditMode] = useState<string | null>(null);
   const [showAddForm, setShowAddForm] = useState<string | null>(null);
   
@@ -233,7 +236,10 @@ export default function UserProfile() {
   }
   
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
+    <div className="space-y-6 max-w-4xl mx-auto relative">
+      {/* Help Assistant */}
+      <HelpAssistant context="profile" position="bottom-right" autoShow={true} />
+      
       {/* Profile Header */}
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         <div className="h-32 bg-gradient-to-r from-blue-500 to-indigo-600"></div>

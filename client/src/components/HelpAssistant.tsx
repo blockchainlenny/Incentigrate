@@ -42,11 +42,23 @@ export default function HelpAssistant({
   const [isOpen, setIsOpen] = useState(false);
   const [tipIndex, setTipIndex] = useState(0);
   
-  // Check sessionStorage on initial load - we'll only store dismissal for the current session
+  // Check sessionStorage on initial load - but only show once per session
   useEffect(() => {
-    if (autoShow && !sessionStorage.getItem(bubbleKey)) {
+    const hasSeenBubble = sessionStorage.getItem(bubbleKey) === 'seen';
+    const hasSeenAny = sessionStorage.getItem('help_bubbles_global') === 'seen';
+    
+    // Only auto-show if:
+    // 1. autoShow prop is true AND
+    // 2. This specific context bubble hasn't been seen AND
+    // 3. We're not constantly popping up bubbles when navigating
+    if (autoShow && !hasSeenBubble && !hasSeenAny) {
       setIsOpen(true);
+      // Mark that we've shown at least one bubble this session
+      sessionStorage.setItem('help_bubbles_global', 'seen');
     }
+    
+    // Mark this specific context as seen
+    sessionStorage.setItem(bubbleKey, 'seen');
   }, [autoShow, bubbleKey]);
   
   // Character personality traits

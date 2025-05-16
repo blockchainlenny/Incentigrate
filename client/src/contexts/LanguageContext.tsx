@@ -27,6 +27,11 @@ const translations: Record<Language, Record<string, string>> = {
     profile: 'Profile',
     logout: 'Logout',
     connectWallet: 'Connect Wallet',
+    helpAssistant: 'Help Assistant',
+    learnMore: 'Learn more',
+    next: 'Next',
+    previous: 'Previous',
+    close: 'Close',
     
     // Dashboard
     welcomeBack: 'Welcome back',
@@ -124,6 +129,11 @@ const translations: Record<Language, Record<string, string>> = {
     profile: 'Profil',
     logout: 'Abmelden',
     connectWallet: 'Wallet verbinden',
+    helpAssistant: 'Hilfsassistent',
+    learnMore: 'Mehr erfahren',
+    next: 'Weiter',
+    previous: 'Zurück',
+    close: 'Schließen',
     
     // Dashboard
     welcomeBack: 'Willkommen zurück',
