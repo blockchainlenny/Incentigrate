@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { AppProvider } from './contexts/AppContext';
+import { LanguageProvider } from './contexts/LanguageContext';
 import { Route, Switch } from 'wouter';
 import Home from './pages/Home';
 import NotFound from './pages/not-found';
+import LanguageToggle from './components/LanguageToggle';
 import './index.css';
 
 function Router() {
@@ -17,9 +19,13 @@ function Router() {
 function App() {
   return (
     <AppProvider>
-      <div className="min-h-screen bg-slate-50">
-        <Router />
-      </div>
+      <LanguageProvider>
+        <div className="min-h-screen bg-slate-50">
+          <Router />
+          {/* Adding the language toggle with cultural flag animations */}
+          <LanguageToggle position="top-right" showText={false} size="md" />
+        </div>
+      </LanguageProvider>
     </AppProvider>
   );
 }

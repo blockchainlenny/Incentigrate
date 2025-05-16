@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAppContext } from '../contexts/AppContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { 
   LayoutDashboard, 
   BookOpen, 
@@ -8,8 +9,10 @@ import {
   Map,
   UserCircle,
   LogOut,
-  Gem
+  Gem,
+  Globe
 } from 'lucide-react';
+import LanguageToggle from './LanguageToggle';
 
 interface NavMenuProps {
   currentView: string;
@@ -18,14 +21,15 @@ interface NavMenuProps {
 
 export default function NavMenu({ currentView, navigateTo }: NavMenuProps) {
   const { isLoggedIn, userName, oTokenBalance, logout } = useAppContext();
+  const { t, currentLanguage } = useLanguage();
 
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'module_list', label: 'Learning', icon: BookOpen },
-    { id: 'integration_journey', label: 'My Path', icon: Map },
-    { id: 'forum', label: 'Forum', icon: MessagesSquare },
-    { id: 'wallet', label: 'Wallet', icon: WalletIcon },
-    { id: 'user_profile', label: 'Profile', icon: UserCircle },
+    { id: 'dashboard', label: t('dashboard'), icon: LayoutDashboard },
+    { id: 'module_list', label: t('learning'), icon: BookOpen },
+    { id: 'integration_journey', label: t('myPath'), icon: Map },
+    { id: 'forum', label: t('forum'), icon: MessagesSquare },
+    { id: 'wallet', label: t('wallet'), icon: WalletIcon },
+    { id: 'user_profile', label: t('profile'), icon: UserCircle },
   ];
 
   return (
