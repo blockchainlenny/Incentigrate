@@ -44,16 +44,24 @@ export default function HelpAssistant({
   
   // On component mount, check if we should show bubble
   useEffect(() => {
-    // First visit detection - show only one bubble per app session
-    const hasSeenAnyBubbles = localStorage.getItem('help_bubbles_global') === 'seen';
+    // Global setting to prevent bubbles from appearing on every page
+    const globalBubbleShown = localStorage.getItem('help_bubbles_global') === 'shown';
     
-    // Only auto-show if this is the first time the user is seeing any bubble
-    if (autoShow && !hasSeenAnyBubbles) {
+    // Per-session setting to remember if user has seen this specific context
+    const sessionBubbleShown = sessionStorage.getItem(bubbleKey) === 'seen';
+    
+    // Only show bubbles if:
+    // 1. Auto-show is true AND
+    // 2. User hasn't seen ANY bubbles in this app session yet
+    // 3. AND this specific context hasn't been seen in this browser session
+    if (autoShow && !globalBubbleShown && !sessionBubbleShown) {
       setIsOpen(true);
-      // Mark globally that we've shown a bubble
-      localStorage.setItem('help_bubbles_global', 'seen');
+      // Mark globally that we've shown a bubble for this page load
+      localStorage.setItem('help_bubbles_global', 'shown');
+      // Also mark this specific context as seen for this browser session
+      sessionStorage.setItem(bubbleKey, 'seen');
     }
-  }, []); // Empty dependency array - only run on mount
+  }, []); // Empty dependency array - only run on component mount
   
   // Character personality traits
   const characterName = "Inti";
@@ -301,7 +309,7 @@ export default function HelpAssistant({
                     className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1"
                   >
                     <MessageCircle size={14} />
-                    {t('continueModule')}
+                    {t('next')}
                   </button>
                   <div className="text-xs text-slate-400">
                     {tipIndex + 1}/{helpTips[context].length}
