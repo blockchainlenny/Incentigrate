@@ -389,6 +389,16 @@ export default function IntegrationJourneyScreen() {
           and local authorities for the most up-to-date information.
         </p>
       </div>
+      
+      {/* AI Assistant for Integration Journey */}
+      <HelpAssistant 
+        context="integration"
+        position="bottom-right"
+        autoShow={true} 
+        autoHideAfter={12000}
+        pulse={true}
+        size="md"
+      />
     </div>
   );
 }
