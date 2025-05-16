@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAppContext } from '../contexts/AppContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Wallet, Send, ArrowDownCircle, RefreshCw, Copy, ExternalLink, Check, Gem, BookOpen } from 'lucide-react';
+import HelpAssistant from './HelpAssistant';
 import { motion } from 'framer-motion';
 
 export default function WalletScreen() {
@@ -370,6 +371,16 @@ export default function WalletScreen() {
           </div>
         </>
       )}
+      
+      {/* AI Assistant for Wallet */}
+      <HelpAssistant 
+        context="wallet"
+        position="bottom-right"
+        autoShow={true} 
+        autoHideAfter={12000}
+        pulse={true}
+        size="md"
+      />
     </div>
   );
 }

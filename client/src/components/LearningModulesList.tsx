@@ -269,6 +269,16 @@ export default function LearningModulesList({ onSelectModule }: LearningModulesL
           </button>
         </div>
       )}
+      
+      {/* AI Assistant for Learning Modules */}
+      <HelpAssistant 
+        context="learning"
+        position="bottom-right"
+        autoShow={true} 
+        autoHideAfter={10000}
+        pulse={true}
+        size="md"
+      />
     </div>
   );
 }
