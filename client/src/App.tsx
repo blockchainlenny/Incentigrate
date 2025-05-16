@@ -22,8 +22,7 @@ function App() {
       <LanguageProvider>
         <div className="min-h-screen bg-slate-50">
           <Router />
-          {/* Adding the language toggle with cultural flag animations */}
-          <LanguageToggle position="top-right" showText={false} size="md" />
+          {/* We don't need the standalone toggle here since we integrated it in the nav */}
         </div>
       </LanguageProvider>
     </AppProvider>

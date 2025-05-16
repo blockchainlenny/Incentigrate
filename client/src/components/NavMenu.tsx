@@ -64,6 +64,11 @@ export default function NavMenu({ currentView, navigateTo }: NavMenuProps) {
 
           {/* User Info / Login Button */}
           <div className="flex items-center">
+            {/* Language Toggle Button in navigation */}
+            <div className="mr-3 hidden md:block">
+              <LanguageToggle position="inline" showText={false} size="sm" />
+            </div>
+            
             {isLoggedIn ? (
               <div className="flex items-center">
                 <div className="hidden sm:flex items-center bg-blue-600/30 px-3 py-1.5 rounded-full mr-3">
@@ -77,7 +82,7 @@ export default function NavMenu({ currentView, navigateTo }: NavMenuProps) {
                 <button 
                   onClick={() => logout()}
                   className="text-sm bg-blue-600/30 hover:bg-blue-600/50 rounded-md p-2 transition-colors"
-                  title="Logout"
+                  title={t('logout')}
                 >
                   <LogOut className="h-4 w-4" />
                 </button>
@@ -87,7 +92,7 @@ export default function NavMenu({ currentView, navigateTo }: NavMenuProps) {
                 onClick={() => navigateTo('wallet')}
                 className="text-sm bg-green-600 hover:bg-green-700 px-3 py-1.5 rounded-md transition-colors"
               >
-                Connect Wallet
+                {t('connectWallet')}
               </button>
             )}
           </div>
@@ -113,6 +118,16 @@ export default function NavMenu({ currentView, navigateTo }: NavMenuProps) {
               </button>
             );
           })}
+          
+          {/* Mobile Language Toggle */}
+          <div className="flex flex-col items-center">
+            <div className="p-2 rounded-full bg-blue-700/30 flex items-center justify-center">
+              <LanguageToggle position="inline" showText={false} size="sm" />
+            </div>
+            <span className="text-xs mt-1 text-slate-200">
+              {currentLanguage.toUpperCase()}
+            </span>
+          </div>
         </div>
       </div>
     </div>
