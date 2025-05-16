@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAppContext } from '../contexts/AppContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { learningModules } from '../lib/data';
@@ -10,6 +10,7 @@ import {
 import { motion } from 'framer-motion';
 import PersonalizedRecommendations from './PersonalizedRecommendations';
 import AnimatedIcon from './AnimatedIcon';
+import HelpAssistant from './HelpAssistant';
 
 interface DashboardProps {
   navigateTo: (view: any, moduleId?: string, moduleTitle?: string) => void;
@@ -719,6 +720,16 @@ export default function Dashboard({ navigateTo }: DashboardProps) {
           <PersonalizedRecommendations navigateTo={navigateTo} />
         </div>
       )}
+
+      {/* AI Assistant */}
+      <HelpAssistant 
+        context="dashboard"
+        position="bottom-right"
+        autoShow={true} 
+        autoHideAfter={15000}
+        pulse={true}
+        size="md"
+      />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { getAllLearningModules, LearningModule } from '../lib/data';
 import { useAppContext } from '../contexts/AppContext';
 import { useLanguage } from '../contexts/LanguageContext';
+import HelpAssistant from './HelpAssistant';
 import { 
   BookOpen, 
   GraduationCap, 
