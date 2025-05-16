@@ -67,13 +67,13 @@ export default function NavMenu({ currentView, navigateTo }: NavMenuProps) {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           {/* Logo and App Name */}
-          <div className="flex items-center">
-            <h1 className="font-bold text-xl mr-2">Incentigrate</h1>
+          <div className="flex items-center space-x-2">
+            <h1 className="font-bold text-xl">Incentigrate</h1>
             <span className="text-xs px-2 py-0.5 bg-blue-500 rounded-full">Beta</span>
           </div>
 
           {/* Navigation Items */}
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="hidden lg:flex items-center space-x-1">
             {navItems.map((item) => {
               const isActive = currentView === item.id || 
                 (item.id === 'module_list' && currentView === 'single_module');
@@ -93,46 +93,41 @@ export default function NavMenu({ currentView, navigateTo }: NavMenuProps) {
           </div>
 
           {/* User Info / Login Button */}
-          <div className="flex items-center">
+          <div className="flex items-center space-x-2">
             {/* Language Toggle Button in navigation */}
             <button 
               onClick={handleToggleLanguage}
-              className="mr-3 hidden md:flex items-center bg-blue-600/30 px-3 py-1.5 rounded-full hover:bg-blue-600/50 transition-colors cursor-pointer group"
+              className="hidden md:flex items-center bg-blue-600/30 px-2 py-1.5 rounded-full hover:bg-blue-600/50 transition-colors cursor-pointer"
               title="Click to change language"
             >
               <motion.span 
-                className="text-xl mr-2"
+                className="text-lg mr-1"
                 variants={flagVariants}
                 animate={isAnimating ? 'animate' : 'initial'}
               >
                 {currentLanguage === 'en' ? '🇬🇧' : currentLanguage === 'de' ? '🇩🇪' : '🇸🇦'}
               </motion.span>
-              <div className="flex items-center text-slate-100 group-hover:text-white">
-                <div className="relative">
-                  <Globe className="h-4 w-4 mr-1" />
-                  <div className="absolute -top-1 -right-1 text-xs font-bold">
-                    {currentLanguage === 'en' ? 'EN' : currentLanguage === 'de' ? 'DE' : 'AR'}
-                  </div>
+              <div className="relative hidden md:block">
+                <Globe className="h-4 w-4" />
+                <div className="absolute -top-1 -right-1 text-[10px] font-bold bg-blue-500 text-white rounded-full w-3 h-3 flex items-center justify-center">
+                  {currentLanguage === 'en' ? 'E' : currentLanguage === 'de' ? 'D' : 'A'}
                 </div>
-                <span className="text-sm font-medium">
-                  {currentLanguage === 'en' ? 'English' : currentLanguage === 'de' ? 'Deutsch' : 'العربية'}
-                </span>
               </div>
             </button>
             
             {isLoggedIn ? (
-              <div className="flex items-center">
-                <div className="hidden sm:flex items-center bg-blue-600/30 px-3 py-1.5 rounded-full mr-3">
+              <div className="flex items-center space-x-2">
+                <div className="hidden sm:flex items-center bg-blue-600/30 px-2 py-1.5 rounded-full">
                   <Gem className="h-4 w-4 text-teal-300 mr-1" />
-                  <span className="font-medium text-teal-100">{oTokenBalance} $O</span>
+                  <span className="font-medium text-teal-100 text-sm">{oTokenBalance} $O</span>
                 </div>
-                <div className="hidden sm:flex items-center mr-2 text-slate-200">
-                  <UserCircle className="h-5 w-5 mr-1" />
-                  <span>{userName}</span>
+                <div className="hidden md:flex items-center text-slate-200">
+                  <UserCircle className="h-4 w-4 mr-1" />
+                  <span className="text-sm">{userName}</span>
                 </div>
                 <button 
                   onClick={() => logout()}
-                  className="text-sm bg-blue-600/30 hover:bg-blue-600/50 rounded-md p-2 transition-colors"
+                  className="text-sm bg-blue-600/30 hover:bg-blue-600/50 rounded-md p-1.5 transition-colors"
                   title={t('logout')}
                 >
                   <LogOut className="h-4 w-4" />
@@ -172,8 +167,8 @@ export default function NavMenu({ currentView, navigateTo }: NavMenuProps) {
           
           {/* Mobile Language Toggle */}
           <div className="flex flex-col items-center">
-            <div 
-              className="p-2 rounded-full bg-blue-700/30 flex items-center justify-center relative cursor-pointer"
+            <button 
+              className="p-2 rounded-full bg-blue-700/30 flex items-center justify-center relative cursor-pointer hover:bg-blue-700/50 transition-colors"
               onClick={handleToggleLanguage}
             >
               <motion.span 
@@ -183,12 +178,12 @@ export default function NavMenu({ currentView, navigateTo }: NavMenuProps) {
               >
                 {currentLanguage === 'en' ? '🇬🇧' : currentLanguage === 'de' ? '🇩🇪' : '🇸🇦'}
               </motion.span>
-              <div className="absolute -top-1 -right-1 bg-blue-500 rounded-full text-white text-xs w-4 h-4 flex items-center justify-center font-bold">
+              <div className="absolute -top-1 -right-1 bg-blue-500 rounded-full text-white text-[10px] w-3 h-3 flex items-center justify-center font-bold">
                 {currentLanguage === 'en' ? 'E' : currentLanguage === 'de' ? 'D' : 'A'}
               </div>
-            </div>
+            </button>
             <span className="text-xs mt-1 text-slate-200">
-              {currentLanguage.toUpperCase()}
+              {currentLanguage === 'en' ? 'EN' : currentLanguage === 'de' ? 'DE' : 'AR'}
             </span>
           </div>
         </div>
