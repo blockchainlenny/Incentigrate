@@ -44,17 +44,24 @@ export default function HelpAssistant({
   
   // On component mount, check if we should show bubble
   useEffect(() => {
-    // Only once per app session - this prevents bubbles from showing on every page navigation
-    const hasSeenAnyBubbles = localStorage.getItem('first_visit_complete') === 'true';
+    // Global setting to prevent bubbles from appearing on every page
+    const globalBubbleShown = localStorage.getItem('help_bubbles_global') === 'shown';
     
-    // Only auto-show on the first page visit in the entire app session
-    // Once shown and dismissed, it won't auto-show again until the user refreshes the page
-    if (autoShow && !hasSeenAnyBubbles) {
+    // Per-session setting to remember if user has seen this specific context
+    const sessionBubbleShown = sessionStorage.getItem(bubbleKey) === 'seen';
+    
+    // Only show bubbles if:
+    // 1. Auto-show is true AND
+    // 2. User hasn't seen ANY bubbles in this app session yet
+    // 3. AND this specific context hasn't been seen in this browser session
+    if (autoShow && !globalBubbleShown && !sessionBubbleShown) {
       setIsOpen(true);
-      // Mark that user has seen at least one bubble this session
-      localStorage.setItem('first_visit_complete', 'true');
+      // Mark globally that we've shown a bubble for this page load
+      localStorage.setItem('help_bubbles_global', 'shown');
+      // Also mark this specific context as seen for this browser session
+      sessionStorage.setItem(bubbleKey, 'seen');
     }
-  }, []); // Empty dependency array - only run once per component mount
+  }, []); // Empty dependency array - only run on component mount
   
   // Character personality traits
   const characterName = "Inti";
@@ -248,8 +255,13 @@ export default function HelpAssistant({
 
   // Function to toggle the assistant
   const toggleAssistant = () => {
-    // Simply toggle the open state without affecting the global appearance
-    setIsOpen(!isOpen);
+    if (isOpen) {
+      // When closing bubble, store in sessionStorage for this context only
+      sessionStorage.setItem(bubbleKey, 'seen');
+      setIsOpen(false);
+    } else {
+      setIsOpen(true);
+    }
   };
 
   // Check if this context bubble has been seen before
