@@ -6,8 +6,8 @@ import SingleModuleView from '../components/SingleModuleView';
 import ForumScreen from '../components/ForumScreen';
 import WalletScreen from '../components/WalletScreen';
 import IntegrationJourneyScreen from '../components/IntegrationJourneyScreen';
-import { Gem } from 'lucide-react';
 import LoginOptions from '../components/LoginOptions';
+import NavMenu from '../components/NavMenu';
 
 export type ViewType = 
   | "dashboard" 
@@ -61,36 +61,13 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
-      {/* Header */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-4 flex items-center justify-between h-16">
-          <div className="flex items-center">
-            <h1 className="text-xl font-bold text-blue-600 mr-2">Incentigrate</h1>
-            <span className="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full">Beta</span>
-          </div>
-          
-          {isLoggedIn ? (
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center bg-teal-50 px-3 py-1.5 rounded-full">
-                <Gem className="h-4 w-4 text-teal-500 mr-1" />
-                <span className="font-medium text-teal-700">{oTokenBalance} $O</span>
-              </div>
-              <div className="text-sm text-slate-600">
-                Hello, <span className="font-medium">{userName}</span>
-              </div>
-            </div>
-          ) : (
-            <button 
-              onClick={() => navigateTo('wallet')}
-              className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md"
-            >
-              Connect Wallet
-            </button>
-          )}
-        </div>
-      </header>
+      {/* Navigation Menu */}
+      <NavMenu 
+        currentView={currentView} 
+        navigateTo={(view, moduleId, moduleTitle) => navigateTo(view as ViewType, moduleId, moduleTitle)}
+      />
 
-      {/* Navigation */}
+      {/* Main Content */}
       <div className="container mx-auto px-4 py-6 flex-grow">
         {!isLoggedIn && currentView !== 'wallet' && (
           <div className="mb-6">

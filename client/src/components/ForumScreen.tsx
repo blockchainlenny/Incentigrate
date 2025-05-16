@@ -1,9 +1,23 @@
-import { useState } from "react";
-import { useAppContext } from "@/contexts/AppContext";
-import { Search, ArrowRight, ArrowLeft, User, UserCheck } from "lucide-react";
+import React, { useState } from 'react';
+import { useAppContext } from '../contexts/AppContext';
+import { 
+  MessageSquare, 
+  Users, 
+  Star, 
+  MessageCircle, 
+  Award, 
+  Search, 
+  Filter,
+  ChevronDown,
+  ChevronUp,
+  Share2,
+  Heart,
+  ThumbsUp
+} from 'lucide-react';
 
+// Mock forum post data (in a real app, this would come from backend API)
 interface ForumPost {
-  id: number;
+  id: string;
   title: string;
   author: string;
   authorImage: string;
@@ -12,215 +26,348 @@ interface ForumPost {
   content: string;
   tags: string[];
   replies: number;
+  likes: number;
   isAnnouncement?: boolean;
+  isLiked?: boolean;
 }
 
+const mockPosts: ForumPost[] = [
+  {
+    id: 'post1',
+    title: 'Important: New Integration Resources Available',
+    author: 'Incentigrate Team',
+    authorImage: 'https://api.dicebear.com/7.x/initials/svg?seed=IT',
+    time: '2 days ago',
+    category: 'Announcements',
+    content: 'We\'ve added new resources to help with residence registration and finding housing. Check out the Integration Journey section for updated guidance on completing these essential steps.',
+    tags: ['official', 'resources', 'announcement'],
+    replies: 7,
+    likes: 23,
+    isAnnouncement: true
+  },
+  {
+    id: 'post2',
+    title: 'Tips for passing the B1 German language exam?',
+    author: 'Mohammad S.',
+    authorImage: 'https://api.dicebear.com/7.x/initials/svg?seed=MS',
+    time: '5 hours ago',
+    category: 'Language Learning',
+    content: 'I\'m preparing for the B1 language exam next month and feeling nervous. Has anyone here taken it recently? Any advice on the speaking portion? I\'m particularly worried about that part.',
+    tags: ['german', 'language-exam', 'b1-level'],
+    replies: 12,
+    likes: 8
+  },
+  {
+    id: 'post3',
+    title: 'Successfully got my residence permit today!',
+    author: 'Amina K.',
+    authorImage: 'https://api.dicebear.com/7.x/initials/svg?seed=AK',
+    time: '1 day ago',
+    category: 'Success Stories',
+    content: 'After months of waiting and gathering documents, I finally received my residence permit today! The process was complicated but worth it. Happy to answer questions if anyone is going through the same process.',
+    tags: ['residence-permit', 'bureaucracy', 'success'],
+    replies: 18,
+    likes: 45
+  },
+  {
+    id: 'post4',
+    title: 'Job opportunities for English speakers?',
+    author: 'Raj P.',
+    authorImage: 'https://api.dicebear.com/7.x/initials/svg?seed=RP',
+    time: '3 days ago',
+    category: 'Employment',
+    content: 'I\'m still working on my German but need to find a job soon. Does anyone know companies that hire English speakers in Berlin? I have experience in IT support and some web development skills.',
+    tags: ['jobs', 'english', 'berlin', 'it'],
+    replies: 9,
+    likes: 12
+  },
+  {
+    id: 'post5',
+    title: 'Affordable housing in Munich - is it possible?',
+    author: 'Sophia L.',
+    authorImage: 'https://api.dicebear.com/7.x/initials/svg?seed=SL',
+    time: '1 week ago',
+    category: 'Housing',
+    content: 'I\'ve been searching for an apartment in Munich for two months now and everything is so expensive. Are there any neighborhoods or resources I should be looking at? Any tips for standing out in applications?',
+    tags: ['housing', 'munich', 'rent'],
+    replies: 21,
+    likes: 19
+  }
+];
+
+// Forum categories
+const categories = [
+  { id: 'all', name: 'All Categories' },
+  { id: 'announcements', name: 'Announcements' },
+  { id: 'language', name: 'Language Learning' },
+  { id: 'employment', name: 'Employment' },
+  { id: 'housing', name: 'Housing' },
+  { id: 'bureaucracy', name: 'Bureaucracy Help' },
+  { id: 'culture', name: 'Culture & Social' },
+  { id: 'success', name: 'Success Stories' },
+  { id: 'questions', name: 'General Questions' },
+];
+
 export default function ForumScreen() {
-  const { isLoggedIn } = useAppContext();
-  const [activeCategory, setActiveCategory] = useState<string>("all");
-  const [searchQuery, setSearchQuery] = useState<string>("");
-
-  // Mock forum posts data
-  const forumPosts: ForumPost[] = [
-    {
-      id: 1,
-      title: "Tips for finding affordable housing in Berlin?",
-      author: "Lisa M.",
-      authorImage: "https://randomuser.me/api/portraits/women/32.jpg",
-      time: "3 hours ago",
-      category: "Housing",
-      content: "I've been searching for an apartment for weeks with no luck. Does anyone have tips on finding affordable housing? I'm especially interested in WGs or temporary solutions while I continue my search...",
-      tags: ["Affordable Housing", "Berlin", "WG"],
-      replies: 12
-    },
-    {
-      id: 2,
-      title: "How did you find your first job in Germany?",
-      author: "Ahmed K.",
-      authorImage: "https://randomuser.me/api/portraits/men/45.jpg",
-      time: "Yesterday",
-      category: "Work & Employment",
-      content: "I have a background in software engineering and I'm trying to find my first position in Germany. What job platforms work best? Did anyone have success with specific companies that are open to hiring internationals?",
-      tags: ["Job Search", "Tech Jobs", "First Employment"],
-      replies: 28
-    },
-    {
-      id: 3,
-      title: "ANNOUNCEMENT: New Tax Filing Workshop Next Week",
-      author: "Moderator",
-      authorImage: "",
-      time: "2 days ago",
-      category: "Announcement",
-      content: "We're hosting a virtual workshop on filing taxes in Germany for newcomers. The session will cover basics of the German tax system, how to submit your first tax declaration, and common deductions. Join us on June 15th at 18:00 CET.",
-      tags: ["Workshop", "Taxes", "Free Event"],
-      replies: 5,
-      isAnnouncement: true
+  const { isLoggedIn, userName } = useAppContext();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [expandedPostId, setExpandedPostId] = useState<string | null>(null);
+  const [sortOption, setSortOption] = useState('recent');
+  const [likedPosts, setLikedPosts] = useState<string[]>([]);
+  
+  // Toggle post expansion
+  const togglePostExpansion = (postId: string) => {
+    setExpandedPostId(expandedPostId === postId ? null : postId);
+  };
+  
+  // Toggle like on a post
+  const toggleLike = (postId: string) => {
+    if (!isLoggedIn) return;
+    
+    setLikedPosts(prev => 
+      prev.includes(postId) 
+        ? prev.filter(id => id !== postId) 
+        : [...prev, postId]
+    );
+  };
+  
+  // Filter posts based on search and category
+  const filteredPosts = mockPosts.filter(post => {
+    const matchesSearch = 
+      searchTerm === '' || 
+      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      post.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+    
+    const matchesCategory = 
+      selectedCategory === 'all' || 
+      (selectedCategory === 'announcements' && post.isAnnouncement) ||
+      post.category.toLowerCase().includes(selectedCategory.toLowerCase());
+    
+    return matchesSearch && matchesCategory;
+  });
+  
+  // Sort posts based on selected option
+  const sortedPosts = [...filteredPosts].sort((a, b) => {
+    switch (sortOption) {
+      case 'recent':
+        // Simple mock sorting by time (in a real app would use actual dates)
+        return a.time.includes('hour') ? -1 : 1;
+      case 'popular':
+        return b.likes - a.likes;
+      case 'most_replies':
+        return b.replies - a.replies;
+      default:
+        return 0;
     }
-  ];
-
-  const categories = [
-    { id: "all", name: "All Discussions", count: forumPosts.length },
-    { id: "language", name: "Language Learning", count: 24 },
-    { id: "housing", name: "Housing", count: 18 },
-    { id: "work", name: "Work & Employment", count: 15 },
-    { id: "bureaucracy", name: "Bureaucracy Help", count: 31 },
-    { id: "events", name: "Social Events", count: 7 },
-    { id: "success", name: "Success Stories", count: 0 },
-    { id: "general", name: "General Questions", count: 0 }
-  ];
-
-  const filteredPosts = activeCategory === "all" 
-    ? forumPosts 
-    : forumPosts.filter(post => post.category.toLowerCase().includes(activeCategory));
+  });
 
   return (
-    <div className="container mx-auto px-4 py-6 max-w-6xl">
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-slate-900">Community Forum</h1>
-        <p className="text-slate-600">Connect with other users, ask questions and share experiences</p>
+    <div className="max-w-4xl mx-auto">
+      <h1 className="text-2xl font-bold text-slate-800 mb-2">Community Forum</h1>
+      <p className="text-slate-600 mb-6">
+        Connect with others on their integration journey, share experiences, ask questions, 
+        and find support for your specific challenges.
+      </p>
+      
+      {/* Search and Filter Bar */}
+      <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-4 mb-6">
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex-1">
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-5 w-5 text-slate-400" />
+              </div>
+              <input
+                type="text"
+                placeholder="Search discussions..."
+                className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          </div>
+          
+          <div className="flex space-x-2">
+            <select
+              className="border border-slate-300 rounded-md px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+            >
+              {categories.map(category => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+            
+            <select
+              className="border border-slate-300 rounded-md px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={sortOption}
+              onChange={(e) => setSortOption(e.target.value)}
+            >
+              <option value="recent">Most Recent</option>
+              <option value="popular">Most Popular</option>
+              <option value="most_replies">Most Replies</option>
+            </select>
+          </div>
+        </div>
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Left sidebar - categories */}
-        <div className="lg:col-span-1">
-          <div className="bg-white rounded-xl shadow-sm p-4 border border-slate-200 sticky top-20">
-            <h3 className="font-medium text-slate-800 mb-3 px-2">Forum Categories</h3>
-            <div className="space-y-1">
-              {categories.map(category => (
-                <button 
-                  key={category.id}
-                  onClick={() => setActiveCategory(category.id)}
-                  className={`w-full text-left px-3 py-2 rounded-md ${
-                    activeCategory === category.id 
-                      ? "bg-themeBlue text-white font-medium" 
-                      : "text-slate-700 hover:bg-slate-100"
-                  } text-sm flex justify-between items-center`}
-                >
-                  <span>{category.name}</span>
-                  {category.count > 0 && (
-                    <span className={`${
-                      activeCategory === category.id 
-                        ? "bg-white/20 text-white" 
-                        : "bg-slate-200 text-slate-600"
-                      } text-xs px-2 py-0.5 rounded-full`}
-                    >
-                      {category.count}
+      {/* New Post Button */}
+      <div className="mb-6 flex justify-between items-center">
+        <h2 className="text-lg font-semibold text-slate-800">Discussions</h2>
+        <button 
+          className={`px-4 py-2 rounded-md text-sm font-medium ${
+            isLoggedIn 
+              ? 'bg-blue-600 hover:bg-blue-700 text-white transition-colors' 
+              : 'bg-slate-200 text-slate-500 cursor-not-allowed'
+          }`}
+          disabled={!isLoggedIn}
+          title={isLoggedIn ? 'Start a new discussion' : 'Please log in to post'}
+        >
+          <MessageCircle className="h-4 w-4 inline mr-1" />
+          New Post
+        </button>
+      </div>
+      
+      {/* Posts List */}
+      <div className="space-y-4">
+        {sortedPosts.map(post => {
+          const isExpanded = expandedPostId === post.id;
+          const isLiked = likedPosts.includes(post.id);
+          
+          return (
+            <div 
+              key={post.id}
+              className={`bg-white rounded-lg shadow-sm border ${
+                post.isAnnouncement ? 'border-blue-200' : 'border-slate-200'
+              }`}
+            >
+              {/* Post Header */}
+              <div className={`p-4 ${post.isAnnouncement ? 'bg-blue-50' : ''}`}>
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center mb-2">
+                      {post.isAnnouncement && (
+                        <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full mr-2">
+                          Announcement
+                        </span>
+                      )}
+                      <span className="bg-slate-100 text-slate-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                        {post.category}
+                      </span>
+                    </div>
+                    <h3 className="text-lg font-semibold text-slate-800 mb-1 hover:text-blue-600 cursor-pointer" onClick={() => togglePostExpansion(post.id)}>
+                      {post.title}
+                    </h3>
+                    <div className="flex items-center text-sm text-slate-500">
+                      <img 
+                        src={post.authorImage} 
+                        alt={post.author} 
+                        className="h-6 w-6 rounded-full mr-2" 
+                      />
+                      <span className="font-medium text-slate-700 mr-1">{post.author}</span>
+                      <span className="mx-1">•</span>
+                      <span>{post.time}</span>
+                    </div>
+                  </div>
+                  
+                  <button 
+                    onClick={() => togglePostExpansion(post.id)}
+                    className="text-slate-400 hover:text-slate-600"
+                  >
+                    {isExpanded ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+                  </button>
+                </div>
+                
+                {!isExpanded && (
+                  <p className="text-slate-600 text-sm mt-2 line-clamp-2">
+                    {post.content}
+                  </p>
+                )}
+                
+                <div className="flex flex-wrap gap-1.5 mt-3">
+                  {post.tags.map((tag, i) => (
+                    <span key={i} className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full text-xs">
+                      #{tag}
                     </span>
-                  )}
-                </button>
-              ))}
-            </div>
-            
-            <div className="mt-6 px-2">
-              <button 
-                onClick={() => {
-                  if (!isLoggedIn) {
-                    alert("Please log in to create a post");
-                  }
-                }}
-                className="w-full bg-themeGreen hover:bg-teal-700 text-white font-medium py-2 rounded-md transition-colors"
-              >
-                Create New Post
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        {/* Forum posts */}
-        <div className="lg:col-span-3">
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-slate-200 mb-6">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold text-slate-900">Recent Discussions</h2>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-slate-500">Sort by:</span>
-                <select className="text-sm border border-slate-300 rounded-md px-2 py-1">
-                  <option>Recent Activity</option>
-                  <option>Most Popular</option>
-                  <option>Newest</option>
-                </select>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Expanded Content */}
+              {isExpanded && (
+                <div className="px-4 py-3 border-t border-slate-100">
+                  <p className="text-slate-700 mb-4">{post.content}</p>
+                </div>
+              )}
+              
+              {/* Post Footer */}
+              <div className="px-4 py-2 border-t border-slate-100 flex justify-between">
+                <div className="flex space-x-4">
+                  <button 
+                    className={`flex items-center text-sm ${
+                      isLiked 
+                        ? 'text-red-600 hover:text-red-700' 
+                        : 'text-slate-500 hover:text-slate-700'
+                    } ${!isLoggedIn ? 'cursor-not-allowed opacity-50' : ''}`}
+                    onClick={() => toggleLike(post.id)}
+                    disabled={!isLoggedIn}
+                  >
+                    <Heart className={`h-4 w-4 mr-1 ${isLiked ? 'fill-current' : ''}`} />
+                    <span>{post.likes + (isLiked ? 1 : 0)}</span>
+                  </button>
+                  <button className="flex items-center text-sm text-slate-500 hover:text-slate-700">
+                    <MessageSquare className="h-4 w-4 mr-1" />
+                    <span>{post.replies} replies</span>
+                  </button>
+                </div>
+                <div>
+                  <button className="flex items-center text-sm text-slate-500 hover:text-slate-700">
+                    <Share2 className="h-4 w-4 mr-1" />
+                    <span>Share</span>
+                  </button>
+                </div>
               </div>
             </div>
-            
-            <div className="relative">
-              <input 
-                type="text" 
-                placeholder="Search discussions..." 
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg mb-4 pl-10"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)} 
-              />
-              <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+          );
+        })}
+        
+        {filteredPosts.length === 0 && (
+          <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-8 text-center">
+            <div className="flex justify-center mb-3">
+              <Search className="h-12 w-12 text-slate-300" />
             </div>
-            
-            <div className="space-y-4">
-              {filteredPosts.map(post => (
-                <div 
-                  key={post.id}
-                  className={`border ${
-                    post.isAnnouncement ? "border-slate-200 rounded-lg p-4 bg-blue-50" : "border-slate-200 rounded-lg p-4 hover:border-slate-300"
-                  } transition-colors`}
-                >
-                  <div className="flex justify-between items-start mb-3">
-                    <div className="flex items-center gap-3">
-                      {post.isAnnouncement ? (
-                        <div className="bg-themeBlue text-white p-1.5 rounded-full flex items-center justify-center w-10 h-10">
-                          <UserCheck className="h-5 w-5" />
-                        </div>
-                      ) : (
-                        <img src={post.authorImage} alt={`${post.author} Avatar`} className="w-10 h-10 rounded-full" />
-                      )}
-                      <div>
-                        <h3 className="font-medium text-slate-800">{post.title}</h3>
-                        <div className="flex items-center gap-2 text-xs text-slate-500 mt-1">
-                          <span>Posted by <span className="text-themeBlue">{post.author}</span></span>
-                          <span>•</span>
-                          <span>{post.time}</span>
-                          <span>•</span>
-                          <span className={`${
-                            post.isAnnouncement ? "text-purple-600" : "text-themeGreen"
-                          }`}>{post.category}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex flex-col items-center text-center">
-                      <span className="text-lg font-medium text-slate-700">{post.replies}</span>
-                      <span className="text-xs text-slate-500">replies</span>
-                    </div>
-                  </div>
-                  <p className="text-sm text-slate-600 mb-3">{post.content}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {post.tags.map((tag, index) => (
-                      <span 
-                        key={index} 
-                        className={`text-xs ${
-                          post.isAnnouncement 
-                            ? "bg-blue-100 text-blue-700" 
-                            : "bg-slate-100 text-slate-700"
-                        } px-2 py-1 rounded-full`}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            <div className="flex justify-center mt-6">
-              <nav className="flex items-center gap-1">
-                <button className="w-8 h-8 flex items-center justify-center rounded-md border border-slate-300 text-slate-500 hover:bg-slate-50">
-                  <ArrowLeft className="h-4 w-4" />
-                </button>
-                <button className="w-8 h-8 flex items-center justify-center rounded-md bg-themeBlue text-white">1</button>
-                <button className="w-8 h-8 flex items-center justify-center rounded-md border border-slate-300 text-slate-700 hover:bg-slate-50">2</button>
-                <button className="w-8 h-8 flex items-center justify-center rounded-md border border-slate-300 text-slate-700 hover:bg-slate-50">3</button>
-                <button className="w-8 h-8 flex items-center justify-center rounded-md border border-slate-300 text-slate-500 hover:bg-slate-50">
-                  <ArrowRight className="h-4 w-4" />
-                </button>
-              </nav>
-            </div>
+            <h3 className="text-lg font-medium text-slate-700 mb-1">No discussions found</h3>
+            <p className="text-slate-500">
+              Try adjusting your search or filters to find what you're looking for.
+            </p>
           </div>
+        )}
+      </div>
+      
+      {/* Login to Participate Message */}
+      {!isLoggedIn && (
+        <div className="mt-8 p-5 bg-blue-50 rounded-lg border border-blue-200 text-center">
+          <h3 className="text-lg font-semibold text-blue-800 mb-2">Join the conversation</h3>
+          <p className="text-blue-700 mb-4">
+            Log in or connect your wallet to participate in discussions, like posts, and share your own experiences.
+          </p>
         </div>
+      )}
+      
+      {/* Forum Guidelines */}
+      <div className="mt-8 bg-white rounded-lg shadow-sm border border-slate-200 p-5">
+        <h3 className="text-lg font-semibold text-slate-800 mb-3">Community Guidelines</h3>
+        <ul className="list-disc list-inside text-sm text-slate-600 space-y-2">
+          <li>Be respectful and considerate of others' experiences and questions.</li>
+          <li>Share accurate information and cite official sources when possible.</li>
+          <li>Protect your privacy - don't share personal identification documents or numbers.</li>
+          <li>Use appropriate categories and tags to help others find relevant discussions.</li>
+          <li>Report inappropriate content to moderators.</li>
+        </ul>
       </div>
     </div>
   );
