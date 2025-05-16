@@ -4,7 +4,7 @@ import { learningModules } from '../lib/data';
 import { 
   Gem, GraduationCap, BookOpen, MapPin, Clock, Trophy, Calendar,
   Footprints, Lightbulb, CheckCircle, Medal, Users, Award, Flame,
-  Smile, PartyPopper, Star
+  Smile, PartyPopper, Star, MessageCircle
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import PersonalizedRecommendations from './PersonalizedRecommendations';
@@ -58,16 +58,60 @@ export default function Dashboard({ navigateTo }: DashboardProps) {
         </div>
         
         {!isLoggedIn ? (
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
-            <p className="text-slate-700 mb-3">
-              Connect your wallet or login to start tracking your integration progress and earn token rewards.
-            </p>
-            <button 
-              onClick={() => navigateTo('wallet')}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
-            >
-              Connect & Start Earning
-            </button>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-white p-5 rounded-lg shadow-sm border border-slate-200">
+              <h2 className="text-lg font-medium text-slate-800 mb-3 flex items-center">
+                <GraduationCap className="h-5 w-5 text-blue-500 mr-2" />
+                Start Your Integration Journey
+              </h2>
+              <p className="text-slate-600 mb-4">
+                Incentigrate helps refugees with language learning, career development, and community integration - all while earning rewards.
+              </p>
+              <motion.button 
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => navigateTo('wallet')}
+                className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium py-3 px-4 rounded-md transition-all flex items-center justify-center"
+              >
+                <Smile className="h-5 w-5 mr-2" />
+                Connect Wallet & Start Earning
+              </motion.button>
+            </div>
+            
+            <div className="bg-white p-5 rounded-lg shadow-sm border border-slate-200">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-lg font-medium text-slate-800 flex items-center">
+                  <Trophy className="h-5 w-5 text-amber-500 mr-2" />
+                  Key Platform Features
+                </h3>
+                <motion.div 
+                  animate={{ 
+                    rotate: [0, 5, 0, -5, 0],
+                    transition: { duration: 1.5, repeat: Infinity, repeatDelay: 3 }
+                  }}
+                >
+                  <Star className="h-5 w-5 text-amber-400" />
+                </motion.div>
+              </div>
+              <ul className="space-y-2.5">
+                <li className="flex items-center text-slate-600">
+                  <CheckCircle className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
+                  <span>Interactive language and integration modules</span>
+                </li>
+                <li className="flex items-center text-slate-600">
+                  <CheckCircle className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
+                  <span>Earn tokens for completing integration activities</span>
+                </li>
+                <li className="flex items-center text-slate-600">
+                  <CheckCircle className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
+                  <span>Connect with community support in multiple languages</span>
+                </li>
+                <li className="flex items-center text-slate-600">
+                  <CheckCircle className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
+                  <span>Track your integration progress with helpful guides</span>
+                </li>
+              </ul>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
@@ -239,79 +283,227 @@ export default function Dashboard({ navigateTo }: DashboardProps) {
         )}
       </div>
 
-      {/* Quick Actions Section */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <motion.div 
-          whileHover={{ 
-            scale: 1.02,
-            boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
-          }}
-          onClick={() => navigateTo('module_list')}
-          className="bg-white p-5 rounded-xl shadow-sm border border-slate-200 transition-shadow cursor-pointer"
-        >
-          <div className="flex items-center mb-3">
-            <div className="p-2 bg-blue-50 rounded-lg">
-              <AnimatedIcon 
-                icon={<BookOpen />}
-                size="md"
-                color="text-blue-600" 
-                hoverEffect="pulse"
-              />
+      {/* Quick Access Section - Dynamically changes based on login state */}
+      <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-medium text-slate-800 flex items-center">
+            <Lightbulb className="h-5 w-5 mr-2 text-blue-500" />
+            {isLoggedIn ? "Continue Your Journey" : "Explore Features"}
+          </h2>
+          {isLoggedIn && (
+            <div className="px-2 py-1 bg-blue-100 rounded-md text-xs font-medium text-blue-700 flex items-center">
+              <Flame className="h-3 w-3 mr-1" />
+              {totalProgressData.completed > 0 ? `${totalProgressData.completed} activities completed` : "Start your first activity"}
             </div>
-            <h3 className="ml-3 font-medium text-lg text-slate-800">Learning Modules</h3>
-          </div>
-          <p className="text-slate-600 text-sm">
-            Access language courses, cultural integration materials, and skill training modules.
-          </p>
-        </motion.div>
-        
-        <motion.div 
-          whileHover={{ 
-            scale: 1.02,
-            boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
-          }}
-          onClick={() => navigateTo('integration_journey')}
-          className="bg-white p-5 rounded-xl shadow-sm border border-slate-200 transition-shadow cursor-pointer"
-        >
-          <div className="flex items-center mb-3">
-            <div className="p-2 bg-green-50 rounded-lg">
-              <AnimatedIcon 
-                icon={<MapPin />}
-                size="md"
-                color="text-green-600" 
-                hoverEffect="bounce"
-              />
-            </div>
-            <h3 className="ml-3 font-medium text-lg text-slate-800">Integration Steps</h3>
-          </div>
-          <p className="text-slate-600 text-sm">
-            Track your integration journey - from registration to employment, housing, and more.
-          </p>
-        </motion.div>
-        
-        <motion.div 
-          whileHover={{ 
-            scale: 1.02,
-            boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
-          }}
-          onClick={() => navigateTo('forum')}
-          className="bg-white p-5 rounded-xl shadow-sm border border-slate-200 transition-shadow cursor-pointer"
-        >
-          <div className="flex items-center mb-3">
-            <div className="p-2 bg-amber-50 rounded-lg">
-              <AnimatedIcon 
-                icon={<Users />}
-                size="md"
-                color="text-amber-600" 
-                hoverEffect="wiggle"
-              />
-            </div>
-            <h3 className="ml-3 font-medium text-lg text-slate-800">Community Forum</h3>
-          </div>
-          <p className="text-slate-600 text-sm">
-            Connect with others, ask questions, share experiences, and find local support.
-          </p>
-        </motion.div>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {isLoggedIn ? (
+            // When logged in, show personalized quick access cards with progress
+            <>
+              <motion.div 
+                whileHover={{ 
+                  scale: 1.02,
+                  boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
+                }}
+                onClick={() => navigateTo('module_list')}
+                className="relative bg-gradient-to-br from-blue-50 to-blue-100 p-5 rounded-lg border border-blue-200 transition-shadow cursor-pointer"
+              >
+                <div className="flex items-center mb-2">
+                  <AnimatedIcon 
+                    icon={<BookOpen />}
+                    size="md"
+                    color="text-blue-600" 
+                    hoverEffect="pulse"
+                  />
+                  <h3 className="ml-2 font-medium text-slate-800">Learning Modules</h3>
+                </div>
+                
+                {/* Most recent module or recommended next module */}
+                {recommendedModules.length > 0 && (
+                  <div className="mt-2 p-2 bg-white rounded-md border border-blue-200">
+                    <div className="text-xs font-medium text-blue-800 mb-1">Recommended Next:</div>
+                    <div className="font-medium text-sm text-slate-700">{recommendedModules[0].title}</div>
+                    <div className="flex items-center mt-1.5">
+                      <div className="w-full bg-slate-200 rounded-full h-1.5 mr-2">
+                        <div 
+                          className="bg-blue-500 h-1.5 rounded-full" 
+                          style={{ width: `${learningProgress[recommendedModules[0].id]?.completedSteps 
+                            ? Math.round((learningProgress[recommendedModules[0].id].completedSteps / recommendedModules[0].totalLessons) * 100) 
+                            : 0}%` }}
+                        />
+                      </div>
+                      <span className="text-xs text-slate-500 whitespace-nowrap">
+                        {learningProgress[recommendedModules[0].id]?.completedSteps || 0}/{recommendedModules[0].totalLessons}
+                      </span>
+                    </div>
+                  </div>
+                )}
+                
+                <motion.div 
+                  className="absolute top-2 right-2 bg-blue-200 rounded-full p-1"
+                  whileHover={{ rotate: 15 }}
+                >
+                  <BookOpen className="h-4 w-4 text-blue-700" />
+                </motion.div>
+              </motion.div>
+            
+              <motion.div 
+                whileHover={{ 
+                  scale: 1.02,
+                  boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
+                }}
+                onClick={() => navigateTo('integration_journey')}
+                className="relative bg-gradient-to-br from-green-50 to-green-100 p-5 rounded-lg border border-green-200 transition-shadow cursor-pointer"
+              >
+                <div className="flex items-center mb-2">
+                  <AnimatedIcon 
+                    icon={<MapPin />}
+                    size="md"
+                    color="text-green-600" 
+                    hoverEffect="bounce"
+                  />
+                  <h3 className="ml-2 font-medium text-slate-800">Step Tracker</h3>
+                </div>
+                
+                <div className="mt-2 p-2 bg-white rounded-md border border-green-200">
+                  <div className="text-xs font-medium text-green-800 mb-1">Recent Integration Steps:</div>
+                  <ul className="space-y-1">
+                    <li className="flex items-center text-xs text-slate-600">
+                      <CheckCircle className="h-3 w-3 text-green-500 mr-1 flex-shrink-0" />
+                      <span className="truncate">Application registration completed</span>
+                    </li>
+                    <li className="flex items-center text-xs text-slate-600">
+                      <MapPin className="h-3 w-3 text-amber-500 mr-1 flex-shrink-0" />
+                      <span className="truncate">Language course enrollment pending</span>
+                    </li>
+                  </ul>
+                </div>
+                
+                <motion.div 
+                  className="absolute top-2 right-2 bg-green-200 rounded-full p-1"
+                  whileHover={{ rotate: 15 }}
+                >
+                  <Footprints className="h-4 w-4 text-green-700" />
+                </motion.div>
+              </motion.div>
+              
+              <motion.div 
+                whileHover={{ 
+                  scale: 1.02,
+                  boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
+                }}
+                onClick={() => navigateTo('forum')}
+                className="relative bg-gradient-to-br from-amber-50 to-amber-100 p-5 rounded-lg border border-amber-200 transition-shadow cursor-pointer"
+              >
+                <div className="flex items-center mb-2">
+                  <AnimatedIcon 
+                    icon={<Users />}
+                    size="md"
+                    color="text-amber-600" 
+                    hoverEffect="wiggle"
+                  />
+                  <h3 className="ml-2 font-medium text-slate-800">Community Forum</h3>
+                </div>
+                
+                <div className="mt-2 p-2 bg-white rounded-md border border-amber-200">
+                  <div className="text-xs font-medium text-amber-800 mb-1">Recent Discussions:</div>
+                  <div className="text-sm text-slate-700">Housing options in Berlin</div>
+                  <div className="flex items-center justify-between mt-1 text-xs text-slate-500">
+                    <span>12 new replies</span>
+                    <span className="flex items-center">
+                      <Users className="h-3 w-3 mr-1" />
+                      38 participants
+                    </span>
+                  </div>
+                </div>
+                
+                <motion.div 
+                  className="absolute top-2 right-2 bg-amber-200 rounded-full p-1"
+                  whileHover={{ rotate: 15 }}
+                >
+                  <MessageCircle className="h-4 w-4 text-amber-700" />
+                </motion.div>
+              </motion.div>
+            </>
+          ) : (
+            // When not logged in, show feature highlights
+            <>
+              <motion.div 
+                whileHover={{ 
+                  scale: 1.02,
+                  boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
+                }}
+                className="bg-gradient-to-br from-blue-50 to-blue-100 p-5 rounded-lg border border-blue-200 transition-shadow"
+              >
+                <div className="flex justify-center mb-3">
+                  <div className="p-3 bg-white rounded-full shadow-sm">
+                    <AnimatedIcon 
+                      icon={<GraduationCap />}
+                      size="md"
+                      color="text-blue-600" 
+                      hoverEffect="pulse"
+                      autoAnimate={true}
+                    />
+                  </div>
+                </div>
+                <h3 className="text-center font-medium text-slate-800 mb-2">Language Learning</h3>
+                <p className="text-center text-slate-600 text-sm">
+                  Interactive modules to learn languages essential for daily life and work.
+                </p>
+              </motion.div>
+              
+              <motion.div 
+                whileHover={{ 
+                  scale: 1.02,
+                  boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
+                }}
+                className="bg-gradient-to-br from-green-50 to-green-100 p-5 rounded-lg border border-green-200 transition-shadow"
+              >
+                <div className="flex justify-center mb-3">
+                  <div className="p-3 bg-white rounded-full shadow-sm">
+                    <AnimatedIcon 
+                      icon={<Gem />}
+                      size="md"
+                      color="text-green-600" 
+                      hoverEffect="bounce"
+                      autoAnimate={true}
+                    />
+                  </div>
+                </div>
+                <h3 className="text-center font-medium text-slate-800 mb-2">Token Rewards</h3>
+                <p className="text-center text-slate-600 text-sm">
+                  Earn $O tokens for completing integration steps and learning activities.
+                </p>
+              </motion.div>
+              
+              <motion.div 
+                whileHover={{ 
+                  scale: 1.02,
+                  boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
+                }}
+                className="bg-gradient-to-br from-purple-50 to-purple-100 p-5 rounded-lg border border-purple-200 transition-shadow"
+              >
+                <div className="flex justify-center mb-3">
+                  <div className="p-3 bg-white rounded-full shadow-sm">
+                    <AnimatedIcon 
+                      icon={<Award />}
+                      size="md"
+                      color="text-purple-600" 
+                      hoverEffect="wiggle"
+                      autoAnimate={true}
+                    />
+                  </div>
+                </div>
+                <h3 className="text-center font-medium text-slate-800 mb-2">Achievement Badges</h3>
+                <p className="text-center text-slate-600 text-sm">
+                  Collect badges that showcase your skills and integration milestones.
+                </p>
+              </motion.div>
+            </>
+          )}
+        </div>
       </div>
 
       {/* New Learning Features */}
