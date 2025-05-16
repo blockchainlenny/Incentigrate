@@ -1,7 +1,10 @@
 import React from 'react';
 import { useAppContext } from '../contexts/AppContext';
 import { learningModules } from '../lib/data';
-import { Gem, GraduationCap, BookOpen, MapPin, Clock, Trophy, Calendar } from 'lucide-react';
+import { 
+  Gem, GraduationCap, BookOpen, MapPin, Clock, Trophy, Calendar,
+  Footprints, Lightbulb, CheckCircle, Medal, Users, Award, Flame
+} from 'lucide-react';
 
 interface DashboardProps {
   navigateTo: (view: any, moduleId?: string, moduleTitle?: string) => void;
@@ -138,6 +141,78 @@ export default function Dashboard({ navigateTo }: DashboardProps) {
           <p className="text-slate-600 text-sm">
             Connect with others, ask questions, share experiences, and find local support.
           </p>
+        </div>
+      </div>
+
+      {/* New Learning Features */}
+      <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+        <h2 className="text-xl font-medium text-slate-800 mb-4">New Learning Features</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Duolingo-Style Lessons */}
+          <div className="p-4 rounded-lg border border-blue-200 bg-blue-50">
+            <div className="flex items-center mb-3">
+              <div className="p-2 bg-blue-100 rounded-full">
+                <Lightbulb className="h-5 w-5 text-blue-600" />
+              </div>
+              <h3 className="ml-3 font-medium text-slate-800">Interactive Lessons</h3>
+            </div>
+            <div className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded inline-block mb-2">
+              New Feature
+            </div>
+            <p className="text-sm text-slate-600 mb-3">
+              Learn with fun, interactive exercises in a Duolingo-style interface. Practice language skills and earn rewards as you progress.
+            </p>
+            <button
+              onClick={() => navigateTo('duolingo_lesson')}
+              className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+            >
+              Try a Lesson
+            </button>
+          </div>
+          
+          {/* Quests */}
+          <div className="p-4 rounded-lg border border-amber-200 bg-amber-50">
+            <div className="flex items-center mb-3">
+              <div className="p-2 bg-amber-100 rounded-full">
+                <Trophy className="h-5 w-5 text-amber-600" />
+              </div>
+              <h3 className="ml-3 font-medium text-slate-800">Quest Map</h3>
+            </div>
+            <div className="bg-amber-100 text-amber-800 text-xs font-medium px-2 py-0.5 rounded inline-block mb-2">
+              New Feature
+            </div>
+            <p className="text-sm text-slate-600 mb-3">
+              Complete quests to earn rewards and advance your integration journey. Inspired by Layer3 and Rabbithole.
+            </p>
+            <button
+              onClick={() => navigateTo('quests')}
+              className="w-full py-2 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg transition-colors"
+            >
+              Start Quests
+            </button>
+          </div>
+          
+          {/* Activity Tracking */}
+          <div className="p-4 rounded-lg border border-emerald-200 bg-emerald-50">
+            <div className="flex items-center mb-3">
+              <div className="p-2 bg-emerald-100 rounded-full">
+                <Footprints className="h-5 w-5 text-emerald-600" />
+              </div>
+              <h3 className="ml-3 font-medium text-slate-800">Activity Tracker</h3>
+            </div>
+            <div className="bg-emerald-100 text-emerald-800 text-xs font-medium px-2 py-0.5 rounded inline-block mb-2">
+              New Feature
+            </div>
+            <p className="text-sm text-slate-600 mb-3">
+              Log your real-world integration activities like STEPN's move-to-earn. Earn rewards for classes, appointments, and events.
+            </p>
+            <button
+              onClick={() => navigateTo('activity_tracker')}
+              className="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors"
+            >
+              Track Activities
+            </button>
+          </div>
         </div>
       </div>
 
