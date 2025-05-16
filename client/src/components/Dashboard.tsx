@@ -229,7 +229,7 @@ export default function Dashboard({ navigateTo }: DashboardProps) {
               New Feature
             </div>
             <p className="text-sm text-slate-600 mb-3">
-              Complete quests to earn rewards and advance your integration journey. Inspired by Layer3 and Rabbithole.
+              Complete quests to earn rewards and advance your integration journey through fun, interactive challenges.
             </p>
             <button
               onClick={() => navigateTo('quests')}
@@ -251,7 +251,7 @@ export default function Dashboard({ navigateTo }: DashboardProps) {
               New Feature
             </div>
             <p className="text-sm text-slate-600 mb-3">
-              Log your real-world integration activities like STEPN's move-to-earn. Earn rewards for classes, appointments, and events.
+              Log your real-world integration activities and earn rewards for attending classes, appointments, and community events.
             </p>
             <button
               onClick={() => navigateTo('activity_tracker')}

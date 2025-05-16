@@ -12,11 +12,13 @@ import {
   ChevronUp,
   Share2,
   Heart,
-  ThumbsUp
+  ThumbsUp,
+  Globe,
+  Flag
 } from 'lucide-react';
 
-// Mock forum post data (in a real app, this would come from backend API)
-interface ForumPost {
+// Old forum post interface (keeping for backward compatibility)
+interface OldForumPost {
   id: string;
   title: string;
   author: string;
@@ -31,7 +33,12 @@ interface ForumPost {
   isLiked?: boolean;
 }
 
-const mockPosts: ForumPost[] = [
+// New forum post interface with language
+interface ForumPost extends OldForumPost {
+  language: 'en' | 'de' | 'ar'; // English, German, Arabic
+}
+
+const mockPosts: OldForumPost[] = [
   {
     id: 'post1',
     title: 'Important: New Integration Resources Available',
@@ -108,6 +115,102 @@ const categories = [
   { id: 'questions', name: 'General Questions' },
 ];
 
+// This interface is no longer needed as we're using OldForumPost extended in ForumPost
+
+// Add language-specific forum posts for Arabic and German
+const arabicPosts: ForumPost[] = [
+  {
+    id: 'ar-post1',
+    title: 'نصائح لتعلم اللغة الألمانية بسرعة',
+    author: 'Fatima H.',
+    authorImage: 'https://api.dicebear.com/7.x/initials/svg?seed=FH',
+    time: '3 days ago',
+    category: 'Language Learning',
+    content: 'أنا أدرس اللغة الألمانية منذ ثلاثة أشهر وأريد مشاركة بعض النصائح التي ساعدتني على التعلم بشكل أسرع. أهم شيء هو الممارسة اليومية والاستماع إلى المحتوى الألماني.',
+    tags: ['german', 'learning-tips', 'language'],
+    replies: 7,
+    likes: 15,
+    language: 'ar'
+  },
+  {
+    id: 'ar-post2',
+    title: 'تجربتي مع مكتب العمل في ألمانيا',
+    author: 'Youssef M.',
+    authorImage: 'https://api.dicebear.com/7.x/initials/svg?seed=YM',
+    time: '1 week ago',
+    category: 'Bureaucracy Help',
+    content: 'زرت مكتب العمل الأسبوع الماضي وأود مشاركة تجربتي. المستندات التي احتجتها هي... الخطوات التي اتبعتها كانت...',
+    tags: ['employment-office', 'documents', 'experience'],
+    replies: 12,
+    likes: 8,
+    language: 'ar'
+  },
+  {
+    id: 'ar-post3',
+    title: 'المدارس العربية في برلين',
+    author: 'Layla K.',
+    authorImage: 'https://api.dicebear.com/7.x/initials/svg?seed=LK',
+    time: '4 days ago',
+    category: 'Education',
+    content: 'هل يعرف أحد مدارس عربية جيدة في برلين؟ أريد أن يتعلم أطفالي اللغة العربية بجانب الألمانية.',
+    tags: ['arabic-schools', 'berlin', 'education'],
+    replies: 9,
+    likes: 6,
+    language: 'ar'
+  }
+];
+
+const germanPosts: ForumPost[] = [
+  {
+    id: 'de-post1',
+    title: 'Hilfe bei Anmeldung einer neuen Wohnung',
+    author: 'Tobias M.',
+    authorImage: 'https://api.dicebear.com/7.x/initials/svg?seed=TM',
+    time: '2 days ago',
+    category: 'Bureaucracy Help',
+    content: 'Ich bin vor kurzem umgezogen und muss meine neue Wohnung anmelden. Welche Dokumente brauche ich dafür und wie läuft der Prozess ab?',
+    tags: ['anmeldung', 'wohnung', 'bürokratie'],
+    replies: 14,
+    likes: 10,
+    language: 'de'
+  },
+  {
+    id: 'de-post2',
+    title: 'Sprachcafé in Hamburg',
+    author: 'Laura S.',
+    authorImage: 'https://api.dicebear.com/7.x/initials/svg?seed=LS',
+    time: '1 day ago',
+    category: 'Language Learning',
+    content: 'Wir organisieren ein Sprachcafé in Hamburg, wo Menschen verschiedener Kulturen zusammenkommen können. Kommt vorbei und übt Deutsch oder andere Sprachen in entspannter Atmosphäre!',
+    tags: ['sprachcafé', 'hamburg', 'deutsch-lernen'],
+    replies: 8,
+    likes: 22,
+    language: 'de'
+  },
+  {
+    id: 'de-post3',
+    title: 'Tipps für die Integration im Arbeitsplatz',
+    author: 'Stefan B.',
+    authorImage: 'https://api.dicebear.com/7.x/initials/svg?seed=SB',
+    time: '5 days ago',
+    category: 'Employment',
+    content: 'Ich arbeite seit einem Jahr in einem deutschen Unternehmen und möchte meine Erfahrungen teilen, wie man sich am besten integrieren kann.',
+    tags: ['arbeitsplatz', 'integration', 'erfahrung'],
+    replies: 17,
+    likes: 35,
+    language: 'de'
+  }
+];
+
+// Update the existing posts to include language
+const englishPosts: ForumPost[] = mockPosts.map(post => ({
+  ...post,
+  language: 'en'
+}));
+
+// Combine all language posts
+const allLanguagePosts = [...englishPosts, ...germanPosts, ...arabicPosts];
+
 export default function ForumScreen() {
   const { isLoggedIn, userName } = useAppContext();
   const [searchTerm, setSearchTerm] = useState('');
@@ -115,6 +218,7 @@ export default function ForumScreen() {
   const [expandedPostId, setExpandedPostId] = useState<string | null>(null);
   const [sortOption, setSortOption] = useState('recent');
   const [likedPosts, setLikedPosts] = useState<string[]>([]);
+  const [selectedLanguage, setSelectedLanguage] = useState<'en' | 'de' | 'ar' | 'all'>('all');
   
   // Toggle post expansion
   const togglePostExpansion = (postId: string) => {
@@ -132,8 +236,8 @@ export default function ForumScreen() {
     );
   };
   
-  // Filter posts based on search and category
-  const filteredPosts = mockPosts.filter(post => {
+  // Filter posts based on search, category, and language
+  const filteredPosts = allLanguagePosts.filter(post => {
     const matchesSearch = 
       searchTerm === '' || 
       post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -145,7 +249,11 @@ export default function ForumScreen() {
       (selectedCategory === 'announcements' && post.isAnnouncement) ||
       post.category.toLowerCase().includes(selectedCategory.toLowerCase());
     
-    return matchesSearch && matchesCategory;
+    const matchesLanguage =
+      selectedLanguage === 'all' ||
+      post.language === selectedLanguage;
+    
+    return matchesSearch && matchesCategory && matchesLanguage;
   });
   
   // Sort posts based on selected option
@@ -163,6 +271,16 @@ export default function ForumScreen() {
     }
   });
 
+  // Get language name and flag
+  const getLanguageName = (code: string) => {
+    switch(code) {
+      case 'en': return 'English';
+      case 'de': return 'Deutsch';
+      case 'ar': return 'العربية';
+      default: return 'All Languages';
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold text-slate-800 mb-2">Community Forum</h1>
@@ -170,6 +288,70 @@ export default function ForumScreen() {
         Connect with others on their integration journey, share experiences, ask questions, 
         and find support for your specific challenges.
       </p>
+      
+      {/* Language Tabs */}
+      <div className="mb-6 border-b border-slate-200">
+        <div className="flex flex-wrap">
+          <button
+            onClick={() => setSelectedLanguage('all')}
+            className={`px-4 py-2 border-b-2 font-medium text-sm transition-colors ${
+              selectedLanguage === 'all' 
+                ? 'border-blue-600 text-blue-600' 
+                : 'border-transparent text-slate-600 hover:text-slate-800 hover:border-slate-300'
+            }`}
+          >
+            <Globe className="inline-block h-4 w-4 mr-1.5" />
+            All Languages
+          </button>
+          
+          <button
+            onClick={() => setSelectedLanguage('en')}
+            className={`px-4 py-2 border-b-2 font-medium text-sm transition-colors ${
+              selectedLanguage === 'en' 
+                ? 'border-blue-600 text-blue-600' 
+                : 'border-transparent text-slate-600 hover:text-slate-800 hover:border-slate-300'
+            }`}
+          >
+            <span className="inline-block mr-1.5">🇬🇧</span>
+            English
+          </button>
+          
+          <button
+            onClick={() => setSelectedLanguage('de')}
+            className={`px-4 py-2 border-b-2 font-medium text-sm transition-colors ${
+              selectedLanguage === 'de' 
+                ? 'border-blue-600 text-blue-600' 
+                : 'border-transparent text-slate-600 hover:text-slate-800 hover:border-slate-300'
+            }`}
+          >
+            <span className="inline-block mr-1.5">🇩🇪</span>
+            Deutsch
+          </button>
+          
+          <button
+            onClick={() => setSelectedLanguage('ar')}
+            className={`px-4 py-2 border-b-2 font-medium text-sm transition-colors ${
+              selectedLanguage === 'ar' 
+                ? 'border-blue-600 text-blue-600' 
+                : 'border-transparent text-slate-600 hover:text-slate-800 hover:border-slate-300'
+            }`}
+          >
+            <span className="inline-block mr-1.5">🇸🇦</span>
+            العربية
+          </button>
+        </div>
+      </div>
+      
+      {/* Selected Language Indicator */}
+      {selectedLanguage !== 'all' && (
+        <div className="mb-4 bg-blue-50 rounded-md p-3 flex items-center">
+          <Globe className="h-5 w-5 text-blue-600 mr-2" />
+          <p className="text-blue-700">
+            Showing discussions in <span className="font-medium">{getLanguageName(selectedLanguage)}</span>.
+            {selectedLanguage === 'ar' && " Posts are displayed right-to-left for better readability."}
+          </p>
+        </div>
+      )}
       
       {/* Search and Filter Bar */}
       <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-4 mb-6">
