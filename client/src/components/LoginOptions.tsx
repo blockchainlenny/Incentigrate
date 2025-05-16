@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAppContext } from '../contexts/AppContext';
-import phantomIcon from '../assets/phantom-icon.svg';
-import solflareIcon from '../assets/solflare-icon.svg';
+import phantomLogo from '../assets/phantom-logo.svg';
+import solflareLogo from '../assets/solflare-logo.svg';
 
 export default function LoginOptions() {
   const { login } = useAppContext();
@@ -45,7 +45,7 @@ export default function LoginOptions() {
           onClick={() => handleWalletConnect('phantom')}
           className="flex items-center justify-center gap-2 bg-[#AB9FF2] hover:bg-[#9A8BDE] text-white font-medium py-2.5 px-4 rounded-lg transition-colors"
         >
-          <img src={phantomIcon} alt="Phantom" className="h-6 w-6" />
+          <img src={phantomLogo} alt="Phantom" className="h-6 w-6" />
           <span>Phantom</span>
         </button>
         
@@ -53,7 +53,7 @@ export default function LoginOptions() {
           onClick={() => handleWalletConnect('solflare')}
           className="flex items-center justify-center gap-2 bg-[#FC9D0D] hover:bg-[#E88F00] text-white font-medium py-2.5 px-4 rounded-lg transition-colors"
         >
-          <img src={solflareIcon} alt="Solflare" className="h-6 w-6" />
+          <img src={solflareLogo} alt="Solflare" className="h-6 w-6" />
           <span>Solflare</span>
         </button>
         
