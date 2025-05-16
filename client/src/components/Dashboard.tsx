@@ -5,6 +5,7 @@ import {
   Gem, GraduationCap, BookOpen, MapPin, Clock, Trophy, Calendar,
   Footprints, Lightbulb, CheckCircle, Medal, Users, Award, Flame
 } from 'lucide-react';
+import PersonalizedRecommendations from './PersonalizedRecommendations';
 
 interface DashboardProps {
   navigateTo: (view: any, moduleId?: string, moduleTitle?: string) => void;
@@ -262,63 +263,10 @@ export default function Dashboard({ navigateTo }: DashboardProps) {
         </div>
       </div>
 
-      {/* Recommended Modules Section */}
+      {/* Personalized Learning Path */}
       {isLoggedIn && (
         <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-          <h2 className="text-xl font-medium text-slate-800 mb-4">Recommended Modules</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {recommendedModules.map(module => (
-              <div 
-                key={module.id}
-                onClick={() => navigateTo('single_module', module.id, module.title)}
-                className="p-4 rounded-lg border border-slate-200 hover:border-blue-300 hover:bg-blue-50 transition-colors cursor-pointer"
-              >
-                <div className="flex items-center mb-2">
-                  <div className="p-2 bg-blue-100 rounded-lg text-blue-700">
-                    {module.icon === 'BookOpen' ? <BookOpen className="h-5 w-5" /> : <GraduationCap className="h-5 w-5" />}
-                  </div>
-                  <h3 className="ml-3 font-medium text-slate-800">{module.title}</h3>
-                </div>
-                
-                <p className="text-sm text-slate-600 mb-3">{module.description}</p>
-                
-                <div className="flex flex-wrap gap-2 mb-3">
-                  {module.tags.map((tag, i) => (
-                    <span key={i} className="px-2 py-1 bg-slate-100 text-slate-700 rounded-full text-xs">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                
-                <div className="flex justify-between text-sm">
-                  <span className="text-slate-600">
-                    <Clock className="inline h-4 w-4 mr-1" />
-                    {module.duration}
-                  </span>
-                  <span className="text-teal-600 font-medium">
-                    <Gem className="inline h-4 w-4 mr-1" />
-                    {module.reward} $O reward
-                  </span>
-                </div>
-              </div>
-            ))}
-
-            {recommendedModules.length === 0 && (
-              <div className="col-span-2 p-6 text-center text-slate-500">
-                No recommended modules at the moment. Check back later!
-              </div>
-            )}
-          </div>
-          
-          <div className="mt-4 text-center">
-            <button 
-              onClick={() => navigateTo('module_list')}
-              className="text-blue-600 hover:text-blue-800 font-medium"
-            >
-              View All Modules →
-            </button>
-          </div>
+          <PersonalizedRecommendations navigateTo={navigateTo} />
         </div>
       )}
     </div>
