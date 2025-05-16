@@ -464,7 +464,8 @@ export default function ForumScreen() {
               key={post.id}
               className={`bg-white rounded-lg shadow-sm border ${
                 post.isAnnouncement ? 'border-blue-200' : 'border-slate-200'
-              }`}
+              } cursor-pointer hover:border-blue-300 transition-colors`}
+              onClick={() => togglePostExpansion(post.id)}
             >
               {/* Post Header */}
               <div className={`p-4 ${post.isAnnouncement ? 'bg-blue-50' : ''}`}>

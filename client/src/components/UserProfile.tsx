@@ -57,7 +57,7 @@ export default function UserProfile() {
   // Sample profile data (would typically come from API/backend)
   const [profile, setProfile] = useState({
     name: 'Mohammed Al-Farsi',
-    photo: 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=MAF&backgroundColor=b6e3f4',
+    photo: 'https://api.dicebear.com/7.x/avataaars/svg?seed=MAF&mouth=smile&eyes=happy&backgroundColor=b6e3f4',
     headline: 'Software Engineer | Recent Arrival Seeking Opportunities',
     location: 'Berlin, Germany',
     email: 'mohammed.al.farsi@example.com',
