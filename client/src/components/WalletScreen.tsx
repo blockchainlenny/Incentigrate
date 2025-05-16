@@ -282,18 +282,98 @@ export default function WalletScreen() {
                 </div>
               </div>
               
+              <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6">
+                <h2 className="text-lg font-semibold text-slate-800 mb-4">Token Redemption</h2>
+                <div className="p-4 bg-blue-50 rounded-lg border border-blue-100 mb-4">
+                  <h3 className="font-medium text-blue-800 mb-2 flex items-center">
+                    <ArrowDownCircle className="h-4 w-4 mr-2" />
+                    Claim Your $O Tokens
+                  </h3>
+                  <p className="text-sm text-blue-700 mb-3">
+                    You can claim your $O tokens after a 3-month holding period and when your balance is at least 5,000 $O.
+                  </p>
+                  
+                  {oTokenBalance >= 5000 ? (
+                    <div>
+                      <div className="mb-3 p-2 bg-white rounded border border-blue-200 flex justify-between items-center">
+                        <div>
+                          <p className="text-sm font-medium text-slate-700">Available to claim:</p>
+                          <p className="text-xl font-bold text-blue-700">{oTokenBalance} $O</p>
+                        </div>
+                        <button 
+                          className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md"
+                          onClick={() => alert("In the real application, this would initiate the Solana token transfer to your wallet. The tokens would be transferred on-chain.")}
+                        >
+                          Claim Now
+                        </button>
+                      </div>
+                      <p className="text-xs text-blue-600">Next claim available: Immediately</p>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="mb-3">
+                        <div className="flex justify-between mb-1 text-sm">
+                          <span className="text-slate-700">Progress to minimum claim</span>
+                          <span className="font-medium text-blue-700">{Math.round((oTokenBalance / 5000) * 100)}%</span>
+                        </div>
+                        <div className="w-full bg-blue-200 rounded-full h-2.5">
+                          <div 
+                            className="bg-blue-600 h-2.5 rounded-full" 
+                            style={{ width: `${Math.min(100, Math.round((oTokenBalance / 5000) * 100))}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                      <p className="text-xs text-blue-600">
+                        {5000 - oTokenBalance} more $O tokens needed to reach the minimum claim amount
+                      </p>
+                      <p className="text-xs text-blue-600 mt-1">
+                        Earliest claim date: {new Date(Date.now() + (90 * 24 * 60 * 60 * 1000)).toLocaleDateString()}
+                      </p>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="text-sm text-slate-600 mb-4">
+                  <h3 className="font-medium text-slate-800 mb-2">Claim Rules:</h3>
+                  <ul className="space-y-1">
+                    <li className="flex items-center">
+                      <div className="h-1.5 w-1.5 rounded-full bg-blue-500 mr-2"></div>
+                      <span>Minimum balance: 5,000 $O tokens</span>
+                    </li>
+                    <li className="flex items-center">
+                      <div className="h-1.5 w-1.5 rounded-full bg-blue-500 mr-2"></div>
+                      <span>3-month holding period required</span>
+                    </li>
+                    <li className="flex items-center">
+                      <div className="h-1.5 w-1.5 rounded-full bg-blue-500 mr-2"></div>
+                      <span>Tokens are transferred to your connected Solana wallet</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              
               <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                <h2 className="text-lg font-semibold text-slate-800 mb-4">Learn About $O Token</h2>
+                <h2 className="text-lg font-semibold text-slate-800 mb-4">About $O Token</h2>
                 <p className="text-sm text-slate-600 mb-4">
-                  The $O token powers the Incentigrate ecosystem and rewards refugees for completing integration steps.
+                  The $O token powers the Incentigrate ecosystem and rewards refugees for completing integration steps and learning modules.
                 </p>
-                <a 
-                  href="#"
-                  className="text-blue-600 hover:text-blue-800 text-sm flex items-center"
-                >
-                  <ExternalLink className="h-3.5 w-3.5 mr-1" />
-                  <span>Learn more about tokenomics</span>
-                </a>
+                <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 text-sm">
+                  <h3 className="font-medium text-slate-800 mb-2">Tokenomics:</h3>
+                  <ul className="space-y-1.5 text-slate-600">
+                    <li className="flex items-start">
+                      <div className="h-1.5 w-1.5 rounded-full bg-teal-500 mt-1.5 mr-2"></div>
+                      <span>100% of tokens are earned by refugees through platform activities</span>
+                    </li>
+                    <li className="flex items-start">
+                      <div className="h-1.5 w-1.5 rounded-full bg-teal-500 mt-1.5 mr-2"></div>
+                      <span>Tokens are backed by real-world integration support services</span>
+                    </li>
+                    <li className="flex items-start">
+                      <div className="h-1.5 w-1.5 rounded-full bg-teal-500 mt-1.5 mr-2"></div>
+                      <span>$O tokens can be used for premium services or redeemed for fiat value</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>

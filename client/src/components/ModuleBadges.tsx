@@ -34,95 +34,87 @@ export default function ModuleBadges({ moduleId, module }: ModuleBadgesProps) {
   
   // Generate badges based on module type and progress
   const generateBadges = (): BadgeData[] => {
-    // Base badges that every module has
-    const badges: BadgeData[] = [
-      {
-        id: `${moduleId}-bronze`,
-        type: 'bronze',
-        category: 'completion',
-        label: 'Getting Started',
-        description: 'Started the module and completed at least 25% of lessons',
-        requiredProgress: 25,
-        xpReward: 50,
-        tokenReward: 1
-      },
-      {
-        id: `${moduleId}-silver`,
-        type: 'silver',
-        category: 'completion',
-        label: 'Halfway There',
-        description: 'Completed 50% of the module lessons',
-        requiredProgress: 50,
-        xpReward: 100,
-        tokenReward: 2
-      },
-      {
-        id: `${moduleId}-gold`,
-        type: 'gold',
-        category: 'completion',
-        label: 'Almost Complete',
-        description: 'Completed 75% of the module lessons',
-        requiredProgress: 75,
-        xpReward: 200,
-        tokenReward: 4
-      },
-      {
-        id: `${moduleId}-platinum`,
-        type: 'platinum',
-        category: 'completion',
-        label: 'Module Complete',
-        description: 'Completed all lessons in this module',
-        requiredProgress: 100,
-        xpReward: 500,
-        tokenReward: 10
-      }
-    ];
+    // Each module has exactly ONE achievement badge that changes type based on progress
+    const progressiveAchievementBadge: BadgeData = {
+      id: `${moduleId}-achievement`,
+      type: progressPercentage >= 100 ? 'master' : 
+            progressPercentage >= 75 ? 'platinum' : 
+            progressPercentage >= 50 ? 'gold' :
+            progressPercentage >= 25 ? 'silver' : 'bronze',
+      category: 'completion',
+      label: progressPercentage >= 100 ? 'Module Mastery' :
+             progressPercentage >= 75 ? 'Advanced Progress' :
+             progressPercentage >= 50 ? 'Solid Progress' :
+             progressPercentage >= 25 ? 'Good Start' : 'Just Beginning',
+      description: progressPercentage >= 100 ? 'Completed all lessons in this module' :
+                  progressPercentage >= 75 ? 'Completed 75% of the module lessons' :
+                  progressPercentage >= 50 ? 'Completed 50% of the module lessons' :
+                  progressPercentage >= 25 ? 'Completed 25% of the module lessons' : 
+                  'Started the module, keep going!',
+      requiredProgress: progressPercentage >= 100 ? 100 :
+                       progressPercentage >= 75 ? 75 :
+                       progressPercentage >= 50 ? 50 :
+                       progressPercentage >= 25 ? 25 : 0,
+      xpReward: 0, // No XP rewards - only tokens as per revised system
+      tokenReward: progressPercentage >= 100 ? 50 :
+                  progressPercentage >= 75 ? 30 :
+                  progressPercentage >= 50 ? 20 :
+                  progressPercentage >= 25 ? 10 : 0
+    };
 
-    // Add specific badges based on module category
+    // Each module has a SINGLE specialty badge based on category
+    let specialtyBadge: BadgeData | null = null;
+    
     if (module.category === 'Language') {
-      badges.push({
-        id: `${moduleId}-language-master`,
+      specialtyBadge = {
+        id: `${moduleId}-language-specialty`,
         type: 'master',
         category: 'language',
-        label: 'Language Master',
-        description: 'Completed the module with all perfect scores in assessments',
+        label: 'Language Expert',
+        description: 'Demonstrated fluency in a new language',
         requiredProgress: 100, // Only available when module is 100% complete
-        xpReward: 1000,
-        tokenReward: 20
-      });
+        xpReward: 0,
+        tokenReward: 25
+      };
     } else if (module.category === 'Culture') {
-      badges.push({
-        id: `${moduleId}-culture-master`,
+      specialtyBadge = {
+        id: `${moduleId}-culture-specialty`,
         type: 'master',
         category: 'culture',
-        label: 'Cultural Expert',
-        description: 'Demonstrated expert knowledge in cultural topics',
+        label: 'Cultural Ambassador',
+        description: 'Gained deep understanding of cultural norms and customs',
         requiredProgress: 100,
-        xpReward: 800,
-        tokenReward: 15
-      });
-    } else if (module.category === 'Professional Skills') {
-      badges.push({
-        id: `${moduleId}-skills-master`,
-        type: 'master',
-        category: 'achievement',
-        label: 'Professional',
-        description: 'Mastered professional skills required for the job market',
-        requiredProgress: 100,
-        xpReward: 900,
-        tokenReward: 18
-      });
-    } else if (module.category === 'Legal & Bureaucracy') {
-      badges.push({
-        id: `${moduleId}-legal-master`,
-        type: 'master',
-        category: 'achievement',
-        label: 'Legal Navigator',
-        description: 'Successfully navigated complex legal procedures',
-        requiredProgress: 100,
-        xpReward: 1200,
+        xpReward: 0,
         tokenReward: 25
-      });
+      };
+    } else if (module.category === 'Professional Skills') {
+      specialtyBadge = {
+        id: `${moduleId}-skills-specialty`,
+        type: 'master',
+        category: 'achievement',
+        label: 'Career Ready',
+        description: 'Acquired key professional skills for employment',
+        requiredProgress: 100,
+        xpReward: 0,
+        tokenReward: 30
+      };
+    } else if (module.category === 'Legal & Bureaucracy') {
+      specialtyBadge = {
+        id: `${moduleId}-legal-specialty`,
+        type: 'master',
+        category: 'achievement',
+        label: 'Integration Expert',
+        description: 'Mastered key legal and administrative procedures',
+        requiredProgress: 100,
+        xpReward: 0,
+        tokenReward: 35
+      };
+    }
+    
+    // Return array with progressive badge and specialty badge (if applicable)
+    const badges = [progressiveAchievementBadge];
+    if (specialtyBadge && progressPercentage >= 100) {
+      badges.push(specialtyBadge);
     }
     
     return badges;
