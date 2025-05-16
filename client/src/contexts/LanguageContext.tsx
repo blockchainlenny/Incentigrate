@@ -103,6 +103,7 @@ const translations: Record<Language, Record<string, string>> = {
     like: 'Like',
     dislike: 'Dislike',
     report: 'Report',
+    search: 'Search modules by title, description, or tags...',
     
     // Status messages
     success: 'Success',
@@ -199,6 +200,7 @@ const translations: Record<Language, Record<string, string>> = {
     like: 'Gefällt mir',
     dislike: 'Gefällt mir nicht',
     report: 'Melden',
+    search: 'Module nach Titel, Beschreibung oder Tags durchsuchen...',
     
     // Status messages
     success: 'Erfolg',
@@ -295,6 +297,7 @@ const translations: Record<Language, Record<string, string>> = {
     like: 'إعجاب',
     dislike: 'عدم الإعجاب',
     report: 'إبلاغ',
+    search: 'البحث عن الوحدات حسب العنوان أو الوصف أو العلامات...',
     
     // Status messages
     success: 'نجاح',

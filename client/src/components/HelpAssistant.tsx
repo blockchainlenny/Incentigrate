@@ -27,6 +27,9 @@ interface HelpTip {
   text_ar: string;
 }
 
+// Create a global session storage to track which bubbles have been shown or dismissed
+const sessionBubbles: Record<string, boolean> = {};
+
 export default function HelpAssistant({ 
   context, 
   position = 'bottom-right',
@@ -35,7 +38,11 @@ export default function HelpAssistant({
   pulse = true,
   size = 'md'
 }: HelpBubbleProps) {
-  const [isOpen, setIsOpen] = useState(autoShow);
+  // Check if this bubble has been dismissed already in this session
+  const bubbleKey = `help_bubble_${context}`;
+  const hasBeenDismissed = sessionBubbles[bubbleKey] === true;
+  
+  const [isOpen, setIsOpen] = useState(autoShow && !hasBeenDismissed);
   const [tipIndex, setTipIndex] = useState(0);
   const { currentLanguage, t } = useLanguage();
   
@@ -223,9 +230,15 @@ export default function HelpAssistant({
     <div className={`fixed ${positionStyles[position]} z-50`}>
       {/* Help Button */}
       <motion.button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          // When closing, mark as dismissed for this session
+          if (isOpen) {
+            sessionBubbles[bubbleKey] = true;
+          }
+          setIsOpen(!isOpen);
+        }}
         className={`${sizeStyles[size].iconSize} p-2 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center ${
-          !isOpen && pulse ? 'animate-pulse' : ''
+          !isOpen && pulse && !hasBeenDismissed ? 'animate-pulse' : ''
         }`}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
