@@ -27,9 +27,6 @@ interface HelpTip {
   text_ar: string;
 }
 
-// Create a global session storage to track which bubbles have been shown or dismissed
-const sessionBubbles: Record<string, boolean> = {};
-
 export default function HelpAssistant({ 
   context, 
   position = 'bottom-right',
@@ -38,13 +35,20 @@ export default function HelpAssistant({
   pulse = true,
   size = 'md'
 }: HelpBubbleProps) {
-  // Check if this bubble has been dismissed already in this session
-  const bubbleKey = `help_bubble_${context}`;
-  const hasBeenDismissed = sessionBubbles[bubbleKey] === true;
-  
-  const [isOpen, setIsOpen] = useState(autoShow && !hasBeenDismissed);
-  const [tipIndex, setTipIndex] = useState(0);
   const { currentLanguage, t } = useLanguage();
+  const bubbleKey = `help_bubble_${context}`;
+  
+  // State for UI management
+  const [isOpen, setIsOpen] = useState(false);
+  const [tipIndex, setTipIndex] = useState(0);
+  
+  // Check localStorage on initial load
+  useEffect(() => {
+    const isDismissed = localStorage.getItem(bubbleKey) === 'dismissed';
+    if (autoShow && !isDismissed) {
+      setIsOpen(true);
+    }
+  }, [autoShow, bubbleKey]);
   
   // Character personality traits
   const characterName = "Inti";
@@ -226,19 +230,37 @@ export default function HelpAssistant({
     setTipIndex((prev) => (prev + 1) % helpTips[context].length);
   };
 
+  // Handle auto-hide after specified time
+  useEffect(() => {
+    if (isOpen && autoHideAfter > 0) {
+      const timer = setTimeout(() => {
+        setIsOpen(false);
+      }, autoHideAfter);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, autoHideAfter]);
+
+  // Function to dismiss the assistant
+  const dismissAssistant = () => {
+    localStorage.setItem(bubbleKey, 'dismissed');
+    setIsOpen(false);
+  };
+
+  // Check if dismissed from localStorage
+  const isDismissed = localStorage.getItem(bubbleKey) === 'dismissed';
+  
+  // Don't render anything if dismissed
+  if (isDismissed && !isOpen) {
+    return null;
+  }
+
   return (
     <div className={`fixed ${positionStyles[position]} z-50`}>
       {/* Help Button */}
       <motion.button
-        onClick={() => {
-          // When closing, mark as dismissed for this session
-          if (isOpen) {
-            sessionBubbles[bubbleKey] = true;
-          }
-          setIsOpen(!isOpen);
-        }}
+        onClick={() => isOpen ? dismissAssistant() : setIsOpen(true)}
         className={`${sizeStyles[size].iconSize} p-2 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center ${
-          !isOpen && pulse && !hasBeenDismissed ? 'animate-pulse' : ''
+          !isOpen && pulse && !isDismissed ? 'animate-pulse' : ''
         }`}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
