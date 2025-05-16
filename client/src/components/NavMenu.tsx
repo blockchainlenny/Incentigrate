@@ -25,6 +25,7 @@ export default function NavMenu({ currentView, navigateTo }: NavMenuProps) {
     { id: 'integration_journey', label: 'My Path', icon: Map },
     { id: 'forum', label: 'Forum', icon: MessagesSquare },
     { id: 'wallet', label: 'Wallet', icon: WalletIcon },
+    { id: 'user_profile', label: 'Profile', icon: UserCircle },
   ];
 
   return (

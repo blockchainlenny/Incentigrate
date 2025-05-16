@@ -77,15 +77,61 @@ export default function Dashboard({ navigateTo }: DashboardProps) {
               <p className="text-sm text-slate-500">Modules Completed</p>
               <p className="text-2xl font-bold text-slate-800">{totalProgressData.modulesClaimed}</p>
             </div>
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-slate-200 flex flex-col items-center">
-              <BookOpen className="h-8 w-8 text-teal-500 mb-2" />
-              <p className="text-sm text-slate-500">Progress Status</p>
-              <p className="text-2xl font-bold text-slate-800">
-                {totalProgressData.total === 0 
-                  ? '0%' 
-                  : Math.round((totalProgressData.completed / totalProgressData.total) * 100) + '%'
+            <div className="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
+              <div className="flex flex-col items-center">
+                <BookOpen className="h-8 w-8 text-teal-500 mb-2" />
+                <p className="text-sm text-slate-500">Progress Status</p>
+                <p className="text-2xl font-bold text-slate-800">
+                  {totalProgressData.total === 0 
+                    ? '0%' 
+                    : Math.round((totalProgressData.completed / totalProgressData.total) * 100) + '%'
+                  }
+                </p>
+              </div>
+              
+              {/* Active modules progress indicator */}
+              <div className="mt-2 pt-2 border-t border-slate-100">
+                <div className="text-xs text-slate-600 mb-1 flex justify-between">
+                  <span>Active Modules Progress:</span>
+                  <span className="font-medium">
+                    {Object.entries(learningProgress)
+                      .filter(([_, module]) => module.completedSteps < module.totalSteps)
+                      .length} active
+                  </span>
+                </div>
+                {Object.entries(learningProgress)
+                  .filter(([_, module]) => module.completedSteps < module.totalSteps)
+                  .slice(0, 2)
+                  .map(([moduleId, module]) => {
+                    const moduleInfo = learningModules.find(m => m.id === moduleId);
+                    const progressPercent = Math.round((module.completedSteps / module.totalSteps) * 100);
+                    
+                    return moduleInfo ? (
+                      <div key={moduleId} className="mb-1.5">
+                        <div className="flex justify-between text-xs mb-0.5">
+                          <span className="truncate text-slate-700" style={{maxWidth: '80%'}}>{moduleInfo.title}</span>
+                          <span className="text-slate-600">{progressPercent}%</span>
+                        </div>
+                        <div className="w-full bg-slate-200 rounded-full h-1.5">
+                          <div 
+                            className="bg-teal-500 h-1.5 rounded-full" 
+                            style={{ width: `${progressPercent}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    ) : null;
+                  })
                 }
-              </p>
+                {Object.entries(learningProgress)
+                  .filter(([_, module]) => module.completedSteps < module.totalSteps)
+                  .length > 2 && (
+                    <div className="text-xs text-blue-600 mt-1 text-center">
+                      <button onClick={() => navigateTo('module_list')}>
+                        View all active modules
+                      </button>
+                    </div>
+                  )}
+              </div>
             </div>
             <div className="bg-white p-4 rounded-lg shadow-sm border border-slate-200 flex flex-col items-center">
               <Calendar className="h-8 w-8 text-purple-500 mb-2" />

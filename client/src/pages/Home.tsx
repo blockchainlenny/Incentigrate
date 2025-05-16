@@ -11,6 +11,7 @@ import NavMenu from '../components/NavMenu';
 import QuestMap from '../components/QuestMap';
 import ActivityTracker from '../components/ActivityTracker';
 import DuolingoStyleLesson from '../components/DuolingoStyleLesson';
+import UserProfile from '../components/UserProfile';
 
 export type ViewType = 
   | "dashboard" 
@@ -21,7 +22,8 @@ export type ViewType =
   | "integration_journey"
   | "quests"
   | "activity_tracker"
-  | "duolingo_lesson";
+  | "duolingo_lesson"
+  | "user_profile";
 
 export default function Home() {
   const { isLoggedIn, userName, oTokenBalance } = useAppContext();
@@ -63,6 +65,8 @@ export default function Home() {
         return <WalletScreen />;
       case 'integration_journey':
         return <IntegrationJourneyScreen />;
+      case 'user_profile':
+        return <UserProfile />;
       case 'quests':
         return <QuestMap onSelectQuest={(questId) => {
           setSelectedQuest(questId);
