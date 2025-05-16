@@ -1,26 +1,17 @@
-# Incentigrate: Empowering Integration, Connecting Communities 🚀🌍
+# Incentigrate: Empowering Integration, Connecting Communities 🌍
 
 [![Solana](https://img.shields.io/badge/Solana-000000?style=for-the-badge&logo=Solana&logoColor=white)](https://solana.com)
 [![Web3](https://img.shields.io/badge/Web3.js-F16822?style=for-the-badge&logo=web3.js&logoColor=white)](https://web3js.org)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-**One-Liner:** Incentigrate is a mobile-first dApp built on Solana, empowering refugees to rebuild their lives by rewarding integration milestones and fostering genuine connections within their new communities.
+**Incentigrate is a mobile-first dApp built on Solana, empowering refugees to rebuild their lives by rewarding integration milestones and fostering genuine connections within their new communities.**
 
 ---
 
 ## ✨ Solana Colosseum Breakout Hackathon Submission ✨
 
-This project is submitted for the Solana Colosseum Breakout Hackathon (May 2025).
-
-**🏆 Focused Track: Jägermeister Sidetrack - "Bringing People Together"**
+This project is submitted for the Solana Colosseum Breakout Hackathon  &  Jägermeister Sidetrack - "Bringing People Together" (May 2025) 
 
 Incentigrate directly embodies Jägermeister's vision by leveraging Web3 technology to unite newcomers and locals, turning the often isolating process of integration into shared, rewarding social experiences.
-
-**🎬 Essential Viewing:**
-* **Pitch Deck & Presentation Video:** [Link to Your YouTube Pitch Video - e.g., https://youtu.be/yourpitchvideoid]
-* **Product Demo Video (Technical Focus):** [Link to Your YouTube Product Demo Video - e.g., https://youtu.be/yourdemovideoid]
 
 ---
 
@@ -43,9 +34,9 @@ Incentigrate is a platform designed to transform refugee integration into an eng
 * **Connect & Belong:** A built-in community forum and features designed to facilitate real-world meetups and cultural exchange, creating a supportive ecosystem.
 * **Empowerment:** Users build a verifiable on-chain record of their achievements, skills, and integration progress.
 
-## 🥃 How Incentigrate Embodies Jägermeister's "Bringing People Together"
+## 🥃 How Incentigrate Embodies "Bringing People Together"
 
-Jägermeister is about creating shared experiences and uniting people. Incentigrate is engineered to do exactly that:
+Incentigrate is engineered to create shared experiences and unite people:
 
 1.  **Shared Experiences through $O Rewards:** $O tokens incentivize participation in local events, language tandems, cultural workshops, and community-organized meetups.
 2.  **Bridging Online & Offline:** Our platform facilitates initial online connections (forums, interest groups) that translate into real-world interactions and friendships.
@@ -81,7 +72,7 @@ Jägermeister is about creating shared experiences and uniting people. Incentigr
 * **Frontend:** Next.js, React, TypeScript
 * **Styling:** Tailwind CSS
 * **Blockchain:** Solana (utilizing `@solana/wallet-adapter-react` for wallet connections)
-* **Deployment (MVP):** Vercel (or Replit, as you mentioned)
+* **Deployment (MVP):** Replit
 * **Database (Conceptual for MVP):** Placeholder for user data, potentially a simple backend or local storage for demo purposes.
 
 ## 🚀 Current Status & Future Roadmap
@@ -113,3 +104,13 @@ npm run dev
 yarn dev
 
 # 4. Open http://localhost:3000 with your browser to see the result.
+```
+
+## 👤 Founder & Contact
+
+**Lenny**
+* Founder & Solana Developer @ Incentigrate
+* **Proven Solana Experience:** Led a community token project on Solana to a $4.7M peak market cap.
+* **Community & Growth Expert:** Experienced Community Builder (Former Ecosystem Manager, MetaMuffin) with a strong background in E-Commerce and Crypto Investment.
+* **Follow Our Journey on X/Twitter:** [https://x.com/Incentigrate](https://x.com/Incentigrate) (1500+ followers)
+* **Get in Touch:** [incentigrate@gmail.com]
