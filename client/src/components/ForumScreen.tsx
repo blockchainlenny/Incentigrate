@@ -674,6 +674,16 @@ export default function ForumScreen() {
           <li>Report inappropriate content to moderators.</li>
         </ul>
       </div>
+      
+      {/* AI Assistant for Forum */}
+      <HelpAssistant 
+        context="forum"
+        position="bottom-right"
+        autoShow={true} 
+        autoHideAfter={10000}
+        pulse={true}
+        size="md"
+      />
     </div>
   );
 }

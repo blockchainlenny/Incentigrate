@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useAppContext } from '../contexts/AppContext';
+import { useLanguage } from '../contexts/LanguageContext';
+import HelpAssistant from './HelpAssistant';
 import { 
   getAllIntegrationSteps, 
   getStepsByCategory, 
@@ -26,6 +28,7 @@ import {
 
 export default function IntegrationJourneyScreen() {
   const { isLoggedIn, updateModuleProgress, claimReward } = useAppContext();
+  const { t } = useLanguage(); // Add translation support
   const [selectedCategory, setSelectedCategory] = useState<StepCategory | 'all'>('all');
   const [expandedSteps, setExpandedSteps] = useState<string[]>([]);
   const [completedSubtasks, setCompletedSubtasks] = useState<Record<string, string[]>>({});
