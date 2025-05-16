@@ -95,7 +95,11 @@ export default function NavMenu({ currentView, navigateTo }: NavMenuProps) {
           {/* User Info / Login Button */}
           <div className="flex items-center">
             {/* Language Toggle Button in navigation */}
-            <div className="mr-3 hidden md:flex items-center bg-blue-600/30 px-3 py-1.5 rounded-full">
+            <button 
+              onClick={handleToggleLanguage}
+              className="mr-3 hidden md:flex items-center bg-blue-600/30 px-3 py-1.5 rounded-full hover:bg-blue-600/50 transition-colors cursor-pointer group"
+              title="Click to change language"
+            >
               <motion.span 
                 className="text-xl mr-2"
                 variants={flagVariants}
@@ -103,16 +107,18 @@ export default function NavMenu({ currentView, navigateTo }: NavMenuProps) {
               >
                 {currentLanguage === 'en' ? '🇬🇧' : currentLanguage === 'de' ? '🇩🇪' : '🇸🇦'}
               </motion.span>
-              <button 
-                onClick={handleToggleLanguage}
-                className="flex items-center text-slate-100 hover:text-white"
-              >
-                <Globe className="h-4 w-4 mr-1" />
+              <div className="flex items-center text-slate-100 group-hover:text-white">
+                <div className="relative">
+                  <Globe className="h-4 w-4 mr-1" />
+                  <div className="absolute -top-1 -right-1 text-xs font-bold">
+                    {currentLanguage === 'en' ? 'EN' : currentLanguage === 'de' ? 'DE' : 'AR'}
+                  </div>
+                </div>
                 <span className="text-sm font-medium">
                   {currentLanguage === 'en' ? 'English' : currentLanguage === 'de' ? 'Deutsch' : 'العربية'}
                 </span>
-              </button>
-            </div>
+              </div>
+            </button>
             
             {isLoggedIn ? (
               <div className="flex items-center">
@@ -167,7 +173,7 @@ export default function NavMenu({ currentView, navigateTo }: NavMenuProps) {
           {/* Mobile Language Toggle */}
           <div className="flex flex-col items-center">
             <div 
-              className="p-2 rounded-full bg-blue-700/30 flex items-center justify-center"
+              className="p-2 rounded-full bg-blue-700/30 flex items-center justify-center relative cursor-pointer"
               onClick={handleToggleLanguage}
             >
               <motion.span 
@@ -177,6 +183,9 @@ export default function NavMenu({ currentView, navigateTo }: NavMenuProps) {
               >
                 {currentLanguage === 'en' ? '🇬🇧' : currentLanguage === 'de' ? '🇩🇪' : '🇸🇦'}
               </motion.span>
+              <div className="absolute -top-1 -right-1 bg-blue-500 rounded-full text-white text-xs w-4 h-4 flex items-center justify-center font-bold">
+                {currentLanguage === 'en' ? 'E' : currentLanguage === 'de' ? 'D' : 'A'}
+              </div>
             </div>
             <span className="text-xs mt-1 text-slate-200">
               {currentLanguage.toUpperCase()}
