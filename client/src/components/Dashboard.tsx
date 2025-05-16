@@ -544,7 +544,7 @@ export default function Dashboard({ navigateTo }: DashboardProps) {
               <div className="flex items-start mb-3">
                 <div className="flex-1">
                   <p className="text-sm text-slate-600">
-                    Learn with fun, interactive exercises in a Duolingo-style interface. Practice language skills and earn rewards as you progress.
+                    Learn with fun and interactive exercises. Practice language skills and earn rewards as you progress.
                   </p>
                 </div>
                 

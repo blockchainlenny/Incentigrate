@@ -292,154 +292,73 @@ export default function WalletScreen() {
                 </div>
               </div>
               
-              <div id="token-redemption" className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl shadow-md p-6 mb-6 text-white relative overflow-hidden">
-                <div className="absolute right-0 top-0 w-32 h-32 opacity-10">
-                  <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm-4-6a6 6 0 100 12 6 6 0 000-12zm3.5 10.5l1 1a7 7 0 10-9 0l1-1a6 6 0 017 0zm-3.5-8.5a2 2 0 110 4 2 2 0 010-4z" />
-                  </svg>
-                </div>
-                
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-bold text-white">Token Redemption</h2>
-                  <div className="bg-white/20 px-2 py-1 rounded-full text-xs font-medium">
-                    Solana Blockchain
-                  </div>
-                </div>
-                
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-5 mb-5 border border-white/20">
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <h3 className="font-bold text-white text-lg mb-1 flex items-center">
-                        <ArrowDownCircle className="h-5 w-5 mr-2 text-blue-200" />
-                        Claim Your $O Tokens
-                      </h3>
-                      <p className="text-blue-100">
-                        Complete integration steps to earn tokens, then claim them!
-                      </p>
-                    </div>
-                    
-                    {/* Friendly character with speech bubble */}
-                    <div className="relative">
-                      <div className="w-16 h-16 bg-white rounded-full overflow-hidden border-2 border-white">
-                        <svg viewBox="0 0 36 36" fill="#FFB02E">
-                          <path d="M18 0C8.06 0 0 8.06 0 18s8.06 18 18 18 18-8.06 18-18S27.94 0 18 0z" />
-                          <path fill="#FFF" d="M18 24c-4.42 0-8-3.58-8-8h16c0 4.42-3.58 8-8 8z" />
-                          <circle fill="#65471B" cx="12" cy="13" r="2.5" />
-                          <circle fill="#65471B" cx="24" cy="13" r="2.5" />
-                        </svg>
-                      </div>
-                      <div className="absolute top-0 right-16 bg-white rounded-lg p-2 text-black text-xs w-32">
-                        <p className="font-bold">You can do it! 💪</p>
-                        <p className="text-xs">Keep learning and earning!</p>
-                        <div className="absolute h-2 w-2 bg-white transform rotate-45 -right-1 top-4"></div>
-                      </div>
-                    </div>
-                  </div>
+              <div id="token-redemption" className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6">
+                <h2 className="text-lg font-semibold text-slate-800 mb-4">Token Redemption</h2>
+                <div className="p-4 bg-blue-50 rounded-lg border border-blue-100 mb-4">
+                  <h3 className="font-medium text-blue-800 mb-2 flex items-center">
+                    <ArrowDownCircle className="h-4 w-4 mr-2" />
+                    Claim Your $O Tokens
+                  </h3>
+                  <p className="text-sm text-blue-700 mb-3">
+                    You can claim your $O tokens after a 3-month holding period and when your balance is at least 5,000 $O.
+                  </p>
                   
                   {oTokenBalance >= 5000 ? (
-                    <div className="bg-white/15 p-4 rounded-lg border border-white/30">
-                      <div className="mb-3 flex justify-between items-center">
+                    <div>
+                      <div className="mb-3 p-2 bg-white rounded border border-blue-200 flex justify-between items-center">
                         <div>
-                          <p className="text-blue-100">Available to claim:</p>
-                          <p className="text-2xl font-bold text-white">{oTokenBalance} $O</p>
+                          <p className="text-sm font-medium text-slate-700">Available to claim:</p>
+                          <p className="text-xl font-bold text-blue-700">{oTokenBalance} $O</p>
                         </div>
-                        
-                        <motion.button 
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-bold rounded-md shadow-lg flex items-center"
+                        <button 
+                          className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md"
                           onClick={() => alert("In the real application, this would initiate the Solana token transfer to your wallet. The tokens would be transferred on-chain.")}
                         >
-                          <span className="mr-2">Claim Now</span>
-                          <Gem className="h-4 w-4" />
-                        </motion.button>
+                          Claim Now
+                        </button>
                       </div>
-                      <div className="flex items-center text-blue-100 text-sm">
-                        <span className="mr-2">✓ Minimum balance reached</span>
-                        <span className="mr-2">✓ Holding period complete</span>
-                      </div>
+                      <p className="text-xs text-blue-600">Next claim available: Immediately</p>
                     </div>
                   ) : (
-                    <div className="bg-white/15 p-4 rounded-lg border border-white/30">
+                    <div>
                       <div className="mb-3">
-                        <div className="flex justify-between mb-1">
-                          <span className="text-blue-100">Progress to minimum claim</span>
-                          <span className="font-bold text-white">{Math.round((oTokenBalance / 5000) * 100)}%</span>
+                        <div className="flex justify-between mb-1 text-sm">
+                          <span className="text-slate-700">Progress to minimum claim</span>
+                          <span className="font-medium text-blue-700">{Math.round((oTokenBalance / 5000) * 100)}%</span>
                         </div>
-                        <div className="w-full bg-blue-900/50 rounded-full h-3 overflow-hidden">
-                          <motion.div 
-                            initial={{ width: 0 }}
-                            animate={{ width: `${Math.min(100, Math.round((oTokenBalance / 5000) * 100))}%` }}
-                            transition={{ duration: 1, ease: "easeOut" }}
-                            className="bg-gradient-to-r from-blue-400 to-indigo-300 h-3 rounded-full relative"
-                          >
-                            {oTokenBalance > 0 && (
-                              <div className="absolute inset-0 overflow-hidden">
-                                <div className="h-full w-full bg-white/20 animate-pulse"></div>
-                              </div>
-                            )}
-                          </motion.div>
+                        <div className="w-full bg-blue-200 rounded-full h-2.5">
+                          <div 
+                            className="bg-blue-600 h-2.5 rounded-full" 
+                            style={{ width: `${Math.min(100, Math.round((oTokenBalance / 5000) * 100))}%` }}
+                          ></div>
                         </div>
                       </div>
-                      
-                      <div className="grid grid-cols-2 gap-3 mt-4">
-                        <div className="bg-white/10 rounded p-2 text-center">
-                          <p className="text-blue-100 text-xs">Needed for Claim</p>
-                          <p className="text-lg font-bold text-white">5,000 $O</p>
-                        </div>
-                        
-                        <div className="bg-white/10 rounded p-2 text-center">
-                          <p className="text-blue-100 text-xs">Your Current Balance</p>
-                          <p className="text-lg font-bold text-white">{oTokenBalance} $O</p>
-                        </div>
-                      </div>
-                      
-                      <div className="text-center mt-4">
-                        <p className="text-blue-100">
-                          You need <span className="font-bold text-white">{5000 - oTokenBalance}</span> more tokens
-                        </p>
-                        <p className="text-blue-200 text-sm mt-1">
-                          Earliest claim date: {new Date(Date.now() + (90 * 24 * 60 * 60 * 1000)).toLocaleDateString()}
-                        </p>
-                      </div>
+                      <p className="text-xs text-blue-600">
+                        {5000 - oTokenBalance} more $O tokens needed to reach the minimum claim amount
+                      </p>
+                      <p className="text-xs text-blue-600 mt-1">
+                        Earliest claim date: {new Date(Date.now() + (90 * 24 * 60 * 60 * 1000)).toLocaleDateString()}
+                      </p>
                     </div>
                   )}
                 </div>
                 
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <div className="flex-1 bg-white/10 p-3 rounded-lg">
-                    <h3 className="font-medium text-white mb-2 flex items-center">
-                      <Check className="h-4 w-4 mr-2 text-green-300" />
-                      Claim Requirements
-                    </h3>
-                    <ul className="space-y-2 text-sm text-blue-100">
-                      <li className="flex items-center">
-                        <div className="h-1.5 w-1.5 rounded-full bg-blue-300 mr-2"></div>
-                        <span>Minimum: 5,000 $O tokens</span>
-                      </li>
-                      <li className="flex items-center">
-                        <div className="h-1.5 w-1.5 rounded-full bg-blue-300 mr-2"></div>
-                        <span>3-month holding period</span>
-                      </li>
-                    </ul>
-                  </div>
-                  
-                  <div className="flex-1 bg-white/10 p-3 rounded-lg">
-                    <h3 className="font-medium text-white mb-2 flex items-center">
-                      <BookOpen className="h-4 w-4 mr-2 text-blue-300" />
-                      Fast-Track Tips
-                    </h3>
-                    <ul className="space-y-2 text-sm text-blue-100">
-                      <li className="flex items-center">
-                        <div className="h-1.5 w-1.5 rounded-full bg-blue-300 mr-2"></div>
-                        <span>Complete language modules</span>
-                      </li>
-                      <li className="flex items-center">
-                        <div className="h-1.5 w-1.5 rounded-full bg-blue-300 mr-2"></div>
-                        <span>Track integration progress</span>
-                      </li>
-                    </ul>
-                  </div>
+                <div className="text-sm text-slate-600 mb-4">
+                  <h3 className="font-medium text-slate-800 mb-2">Claim Rules:</h3>
+                  <ul className="space-y-1">
+                    <li className="flex items-center">
+                      <div className="h-1.5 w-1.5 rounded-full bg-blue-500 mr-2"></div>
+                      <span>Minimum balance: 5,000 $O tokens</span>
+                    </li>
+                    <li className="flex items-center">
+                      <div className="h-1.5 w-1.5 rounded-full bg-blue-500 mr-2"></div>
+                      <span>3-month holding period required</span>
+                    </li>
+                    <li className="flex items-center">
+                      <div className="h-1.5 w-1.5 rounded-full bg-blue-500 mr-2"></div>
+                      <span>Tokens are transferred to your connected Solana wallet</span>
+                    </li>
+                  </ul>
                 </div>
               </div>
               
