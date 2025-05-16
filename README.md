@@ -84,6 +84,8 @@ Incentigrate is engineered to create shared experiences and unite people:
     3.  **Partnership Development:** Secure partnerships with NGOs, government agencies (e.g., BAMF), and CSR-focused corporations (like Jägermeister).
     4.  **Feature Expansion:** Develop more learning modules, advanced community features, and job-matching capabilities.
 
+*(Our comprehensive business model, market analysis, and growth strategy are detailed in our main Pitch Deck and Presentation Video.)*
+
 ## 🏁 Getting Started (Running the MVP Locally)
 
 To run this project locally (primarily for front-end demonstration):
