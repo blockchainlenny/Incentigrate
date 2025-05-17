@@ -16,7 +16,7 @@
 
 ## ✨ Solana Colosseum Breakout Hackathon Submission ✨
 
-This project is submitted for the Solana Colosseum Breakout Hackathon  &  Jägermeister Sidetrack - "Bringing People Together" (May 2025) after 
+This project is submitted for the Solana Colosseum Breakout Hackathon  &  Jägermeister Sidetrack - "Bringing People Together" (May 2025)
 
 Incentigrate directly embodies Jägermeister's vision by leveraging Web3 technology to unite newcomers and locals, turning the often isolating process of integration into shared, rewarding social experiences.
 
